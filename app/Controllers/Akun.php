@@ -8,4 +8,4 @@ namespace App\Controllers;
     {
         return view('akun/index');
     } 
-}
+}                                                                                                                                                

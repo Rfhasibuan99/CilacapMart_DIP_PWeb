@@ -80,6 +80,7 @@
         <div class="col text-end">
             <!-- <a href="layout/ubah" class="btn btn-secondary">Ubah Toko</a> -->
             <a href="/toko1/tambah" class="btn btn-primary">Tambah Barang</a>
+            <a href="/admin" class="btn btn-primary">Kembali</a>
          </div>
         </div>
         </div>
@@ -110,7 +111,7 @@
                      <a href="/toko1/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning">Ubah</a>
                      <a href="/toko1/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger">Hapus</a>
                      <a href="/toko1 <?= $a['id_barang']; ?>" class="btn btn-primary">Pesan</a>
-                     <a href="/toko1/keranjang <?= $a['id_barang']; ?>" class="btn btn-primary">Keranjang</a>
+                     <a href="/toko1 <?= $a['id_barang']; ?>" class="btn btn-primary">Keranjang</a>
                     </td>
                     </tr>
                 <?php endforeach; ?>

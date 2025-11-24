@@ -13,6 +13,8 @@ $routes->get('/chat', 'Chat::index');
 $routes->get('/keranjang', 'Keranjang::index');
 $routes->post('/keranjang/tambah', 'Keranjang::tambah');
 $routes->get('/keranjang/hapus/(:num)', 'Keranjang::hapus/$1');
+$routes->get('/keranjang/tambah/(:num)', 'Keranjang::tambah/$1');
+
 
 $routes->get('/pesanan', 'Pesanan::index');
 $routes->get('/pesanan/detail/(:num)', 'Pesanan::detail/$1');
@@ -75,3 +77,7 @@ $routes->get('auth/google/callback', 'SocialAuth::googleCallback');
 
 $routes->get('auth/apple', 'SocialAuth::apple');
 $routes->post('auth/apple/callback', 'SocialAuth::appleCallback');
+
+
+$routes->get('admin', 'admin\Dashboard::index'); // Dashboard admin
+$routes->get('admin/pesanan', 'admin\Dashboard::pesanan'); // Halaman produk di dashboard admin
