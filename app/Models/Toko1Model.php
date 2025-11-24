@@ -8,7 +8,7 @@ class Toko1Model extends Model
 {
     protected $table = 'toko1';
     protected $primaryKey = 'id_barang';
-    protected $allowedFields = ['nama_barang', 'jenis_barang', 'harga_barang', 'deskripsi', 'gambar'];
+    protected $allowedFields = ['nama_barang', 'jenis_barang', 'deskripsi', 'gambar', 'stok', 'harga_beli', 'harga_jual'];
 
     // getBarang
     public function getBarang($idbarang = false)
@@ -26,7 +26,9 @@ class Toko1Model extends Model
         return $this
             ->like('nama_barang', $cari)
             ->orLike('jenis_barang', $cari)
-            ->orLike('harga_barang', $cari)
-            ->orLike('deskripsi', $cari);
+            ->orLike('deskripsi', $cari)
+            ->orLike('stok', $cari)
+            ->orLike('harga_beli', $cari)
+            ->orLike('harga_jual', $cari);
     }
 }

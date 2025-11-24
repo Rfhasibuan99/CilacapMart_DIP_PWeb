@@ -84,39 +84,68 @@
         </div>
         </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Gambar </th>
-                        <th scope="col">Barang</th>
-                        <th scope="col">Jenis</th>
-                        <th scope="col">Deskripsi</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php $i = 1; ?>
-                <?php foreach ($toko3 as $a): ?>
-                <tr>
-                    <th scope="row"><?= $i++; ?></th>
-                    <td><img src="<?= base_url('img/'.$a['gambar']) ?>" alt="" width="80"></td>
-                    <td><?= esc($a['nama_barang']); ?></td>
-                    <td><?= esc($a['jenis_barang']); ?></td>
-                    <td><?= esc($a['deksripsi']); ?></td>
-                    <td><?= esc($a['harga_barang']); ?></td>
-                    <td>
-                     <a href="/toko3/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning">Ubah</a>
-                     <a href="/toko3/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger">Hapus</a>
-                     <a href="/toko3 <?= $a['id_barang']; ?>" class="btn btn-primary">Pesan</a>
-                    </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>Daftar Barang Toko</h2>
+        
+        <div class="container mt-3">
+        <div class="row">
+        <div class="col text-end">
+            <a href="/toko3/tambah" class="btn btn-primary">Tambah Barang</a>
+         </div>
         </div>
-    </div>
-</div>
+        </div>
+
+        <div class="col-md-12">
+            <?php foreach ($toko3 as $a): ?>
+            <div class="card shadow-sm p-3 mb-4">
+
+                <div class="row g-4">
+                    <div class="col-md-5 text-center">
+                        <img 
+                            src="<?= base_url('img/' . $a['gambar']) ?>" 
+                            onerror="this.src='https://via.placeholder.com/350x350?text=No+Image'"
+                            class="img-fluid rounded border"
+                            style="max-height: 350px; object-fit: cover;"
+                        >
+                    </div>
+
+                    <div class="col-md-7">
+
+                        <h4 class="fw-bold mb-2"><?= $a['nama_barang']; ?></h4>
+
+                        <h5 class="text-danger fw-bold mb-3">
+                            Rp <?= number_format($a['harga_barang'], 0, ',', '.'); ?>
+                        </h5>
+
+                        <div class="mb-3">
+                            <span class="text-muted">Jenis Barang: </span>
+                            <span><?= esc($a['jenis_barang']); ?></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="fw-bold">Deskripsi Produk:</span>
+                            <p class="mt-1"><?= esc($a['deskripsi']); ?></p>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-4">
+                            <a href="/toko3/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning px-4">
+                                Ubah
+                            </a>
+                            <a href="/toko3/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger px-4">
+                                Hapus
+                            </a>
+                            <a href="/toko3/pesan/<?= $a['id_barang']; ?>" class="btn btn-primary px-4">
+                                Pesan
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
 
 <!-- <div class="container mt-3">
     <div class="row">

@@ -1,4 +1,4 @@
-<?php
+ll<?php
 
 use CodeIgniter\Router\RouteCollection;
 
@@ -7,6 +7,8 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Page::index');
 $routes->get('/akun', 'Akun::index');
+$routes->get('/akun/edit', 'Akun::edit');
+$routes->post('/akun/update', 'Akun::update');
 $routes->get('/notifikasi', 'Notifikasi::index');
 $routes->get('/chat', 'Chat::index');
 

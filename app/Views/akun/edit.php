@@ -105,6 +105,49 @@ body {
     padding: 20px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
+
+.form-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #003049;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background-color: #0096C7;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #007aa1;
+}
 </style>
 
 <!-- NAVBAR -->
@@ -164,44 +207,25 @@ body {
 
     <!-- MAIN CONTENT AREA -->
     <div class="content">
-        <h3><b>Akun Saya</b></h3>
+        <h3><b>Ubah Profil</b></h3>
         <br>
-            <?php if (!empty($user) && is_array($user)): ?>
-    <?php foreach ($user as $u): ?>
-        <div class="pesanan-table" style="max-width:800px;">
-            <div style="display:flex; gap:20px; align-items:flex-start;">
-                <div style="flex:0 0 120px; text-align:center;">
-                    <i class="bi bi-person-circle" style="font-size:80px; color:#0096C7;"></i>
+
+        <div class="form-container">
+            <form action="/akun/update" method="post">
+                <?= csrf_field(); ?>
+
+                <div class="form-group">
+                    <label for="username">Nama Pengguna</label>
+                    <input type="text" id="username" name="username" value="<?= session()->get('username') ?? ''; ?>" required>
                 </div>
-                <div style="flex:1;">
-                    <table style="width:100%; font-size:16px; border-collapse:collapse;">
-                        <tr>
-                            <th style="text-align:left; padding:8px 0; width:160px;">Nama Pengguna</th>
-                            <td style="padding:8px 0;">: <?= esc($u['username'])  ?? 'Belum diatur'; ?></td>
-                        </tr>
-                        <tr>
-                            <th style="text-align:left; padding:8px 0;">Email</th>
-                            <td style="padding:8px 0;">: <?= esc($u['email']) ?? 'Belum diatur'; ?></td>
-                        </tr>
-                        <tr>
-                            <th style="text-align:left; padding:8px 0;">Role</th>
-                            <td style="padding:8px 0;">: <?= session()->get('role') ?? 'user'; ?></td>
-                        </tr>
-                        <tr>
-                            <th style="text-align:left; padding:8px 0;">Terdaftar</th>
-                            <td style="padding:8px 0;">: <?= session()->get('created_at') ? date('d/m/Y', strtotime(session()->get('created_at'))) : '-'; ?></td>
-                        </tr>
-                    </table>
-                <?php endforeach; ?>
-                <?php else: ?>
-                <p>Tidak ada data user ditemukan.</p>
-                <?php endif; ?>
-                    <div style="margin-top:18px;">
-                        <a href="/akun/edit" class="btn-detail" style="margin-right:10px;">Ubah Profil</a>
-                        <a href="/akun/change-password" class="btn-detail" style="background:#6c757d;">Ubah Password</a>
-                    </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?= session()->get('email') ?? ''; ?>" required>
                 </div>
-            </div>
+
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </form>
         </div>
     </div>
 

@@ -6,22 +6,29 @@ use CodeIgniter\Model;
 
 class Toko5Model extends Model
 {
-    protected $table = 'toko4';
+    protected $table = 'toko5';
     protected $primaryKey = 'id_barang';
-    protected $useTimestamps = false;
-    protected $allowedFields = ['nama_barang', 'jenis_barang', 'harga_barang', 'deskripsi', 'gambar'];
-        public function getBarang($idbarang = false)
+    protected $allowedFields = ['nama_barang', 'jenis_barang', 'deskripsi', 'gambar', 'stok', 'harga_beli', 'harga_jual'];
+
+    // getBarang
+    public function getBarang($idbarang = false)
     {
         if ($idbarang == false) {
             return $this->findAll();
         }
+
         return $this->where(['id_barang' => $idbarang])->first();
     }
 
+    // findBarang / pencarian
     public function findBarang($cari)
     {
-        return $this->table('toko5')->like('nama_barang', $cari)
-                                    ->orlike('jenis_barang', $cari)
-                                    ->orlike('harga_barang', $cari);
+        return $this
+            ->like('nama_barang', $cari)
+            ->orLike('jenis_barang', $cari)
+            ->orLike('deskripsi', $cari)
+            ->orLike('stok', $cari)
+            ->orLike('harga_beli', $cari)
+            ->orLike('harga_jual', $cari);
     }
 }

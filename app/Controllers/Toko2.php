@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\Toko2Model;
+use App\Models\toko2Model;
 
 class Toko2 extends BaseController
 {
@@ -13,6 +13,9 @@ class Toko2 extends BaseController
         $this->Toko2Model = new Toko2Model();
     }
 
+    // ======================
+    // INDEX
+    // ======================
     public function index()
     {
         $cari = $this->request->getVar('cari');
@@ -23,107 +26,154 @@ class Toko2 extends BaseController
             $toko2 = $this->Toko2Model->getBarang();
         }
 
-        return view('toko2/index', [
-            'title' => 'Daftar Barang toko2',
-            'toko2' => $toko2
-        ]);
+        $data = [
+            'title' => 'Daftar Barang Toko',
+            'toko2'   => $toko2,
+        ];
+
+        return view('toko2/index', $data);
     }
 
+    // ======================
+    // FORM TAMBAH
+    // ======================
     public function tambah()
     {
-        return view('toko2/tambah', [
+        $data = [
             'title' => 'Form Tambah Barang',
             'validation' => \Config\Services::validation()
-        ]);
+        ];
+
+        return view('toko2/tambah', $data);
     }
 
+    // ======================
+    // SIMPAN DATA BARU
+    // ======================
     public function simpan()
     {
         if (!$this->validate([
-            'nama_barang'   => 'required',
+            'nama_barang' => 'required',
             'jenis_barang' => 'required',
-            'harga_barang'  => 'required|numeric',
-            'deskripsi'     => 'required',
+            'deskripsi' => 'required',
             'gambar' => [
-                'rules' => 'uploaded[gambar]|max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]'
-            ]
+                'rules' => 'uploaded[gambar]|max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'uploaded' => 'Gambar wajib diisi',
+                    'max_size' => 'Ukuran gambar terlalu besar',
+                    'is_image' => 'File harus gambar',
+                    'mime_in' => 'Format harus JPG/JPEG/PNG'
+                ]
+                ],
+            'stok' => 'required',
+            'harga_beli' => 'required|numeric',
+            'harga_jual' => 'required|numeric'
         ])) {
             return redirect()->to('/toko2/tambah')->withInput();
         }
 
+        // upload gambar
         $fileGambar = $this->request->getFile('gambar');
         $namaGambar = $fileGambar->getRandomName();
         $fileGambar->move('img', $namaGambar);
 
-        $this->Toko2Model->save([
-            'nama_barang' => $this->request->getVar('nama_barang'),
+        // simpan
+        $this->toko2Model->save([
+            'nama_barang'   => $this->request->getVar('nama_barang'),
             'jenis_barang' => $this->request->getVar('jenis_barang'),
-            'harga_barang' => $this->request->getVar('harga_barang'),
-            'deskripsi' => $this->request->getVar('deskripsi'),
-            'gambar' => $namaGambar
+            'deskripsi'     => $this->request->getVar('deskripsi'),
+            'gambar'        => $namaGambar,
+            'stok'          => $this->request->getVar('stok'),
+            'harga_beli'    => $this->request->getVar('harga_beli'),
+            'harga_jual'    => $this->request->getVar('harga_jual')
         ]);
 
         session()->setFlashdata('pesan', 'Barang berhasil ditambahkan');
         return redirect()->to('/toko2');
     }
 
-    public function ubah($id)
+    // ======================
+    // FORM EDIT
+    // ======================
+    public function ubah($idbarang)
     {
-        return view('toko2/ubah', [
+        $data = [
             'title' => 'Form Ubah Barang',
             'validation' => \Config\Services::validation(),
-            'toko2' => $this->Toko2Model->getBarang($id)
-        ]);
+            'toko2' => $this->toko2Model->getBarang($idbarang)
+        ];
+
+        return view('toko2/ubah', $data);
     }
 
-    public function update($id)
+    // ======================
+    // UPDATE DATA
+    // ======================
+    public function update($idbarang)
     {
-        $dataLama = $this->Toko2Model->getBarang($id);
+        $dataLama = $this->toko2Model->getBarang($idbarang);
 
         if (!$this->validate([
-            'nama_barang'   => 'required',
+            'nama_barang' => 'required',
             'jenis_barang' => 'required',
-            'harga_barang'  => 'required|numeric',
-            'deskripsi'     => 'required',
-            'gambar'        => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/png,image/jpg,image/jpeg]'
+            'deskripsi' => 'required',
+            'gambar' => [
+                'rules' => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/png,image/jpg,image/jpeg]',
+            ],
+            'stok' => 'required',
+            'harga_beli' => 'required|numeric',
+            'harga_jual' => 'required|numeric'
         ])) {
-            return redirect()->to('/toko2/ubah/' . $id)->withInput();
+            return redirect()->to('/toko2/ubah/' . $idbarang)->withInput();
         }
 
-        $file = $this->request->getFile('gambar');
-        $namaGambar = ($file->getError() == 4)
-            ? $dataLama['gambar']
-            : $file->getRandomName();
+        // ambil gambar lama
+        $gambarLama = $dataLama['gambar'];
 
-        if ($file->getError() != 4) {
-            $file->move('img', $namaGambar);
-            if ($dataLama['gambar'] && file_exists('img/' . $dataLama['gambar'])) {
-                unlink('img/' . $dataLama['gambar']);
+        // file baru
+        $fileGambar = $this->request->getFile('gambar');
+
+        if ($fileGambar->getError() == 4) {
+            $namaGambar = $gambarLama; // tidak ganti gambar
+        } else {
+            $namaGambar = $fileGambar->getRandomName();
+            $fileGambar->move('img', $namaGambar);
+
+            // hapus gambar lama jika ada
+            if ($gambarLama && file_exists('img/' . $gambarLama)) {
+                unlink('img/' . $gambarLama);
             }
         }
 
-        $this->Toko2Model->save([
-            'id_barang' => $id,
-            'nama_barang' => $this->request->getVar('nama_barang'),
+        // simpan update
+        $this->toko2Model->save([
+            'id_barang'     => $idbarang,
+            'nama_barang'   => $this->request->getVar('nama_barang'),
             'jenis_barang' => $this->request->getVar('jenis_barang'),
-            'harga_barang' => $this->request->getVar('harga_barang'),
-            'deskripsi' => $this->request->getVar('deskripsi'),
-            'gambar' => $namaGambar
+            'deskripsi'     => $this->request->getVar('deskripsi'),
+            'gambar'        => $namaGambar,
+            'stok'          => $this->request->getVar('stok'),
+            'harga_beli'    => $this->request->getVar('harga_beli'),
+            'harga_jual'    => $this->request->getVar('harga_jual')
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah');
         return redirect()->to('/toko2');
     }
 
-    public function hapus($id)
+    // ======================
+    // HAPUS DATA
+    // ======================
+    public function hapus($idbarang)
     {
-        $data = $this->Toko2Model->getBarang($id);
+        $barang = $this->toko2Model->getBarang($idbarang);
 
-        if ($data['gambar'] && file_exists('img/' . $data['gambar'])) {
-            unlink('img/' . $data['gambar']);
+        // hapus gambar
+        if ($barang['gambar'] && file_exists('img/' . $barang['gambar'])) {
+            unlink('img/' . $barang['gambar']);
         }
 
-        $this->Toko2Model->delete($id);
+        $this->toko2Model->delete($idbarang);
         session()->setFlashdata('pesan', 'Data berhasil dihapus');
         return redirect()->to('/toko2');
     }
