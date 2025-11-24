@@ -55,7 +55,6 @@ class Toko1 extends BaseController
         if (!$this->validate([
             'nama_barang' => 'required',
             'jenis_barang' => 'required',
-            'harga_barang' => 'required|numeric',
             'deskripsi' => 'required',
             'gambar' => [
                 'rules' => 'uploaded[gambar]|max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
@@ -65,7 +64,10 @@ class Toko1 extends BaseController
                     'is_image' => 'File harus gambar',
                     'mime_in' => 'Format harus JPG/JPEG/PNG'
                 ]
-            ]
+                ],
+            'stok' => 'required',
+            'harga_beli' => 'required|numeric',
+            'harga_jual' => 'required|numeric'
         ])) {
             return redirect()->to('/toko1/tambah')->withInput();
         }
@@ -79,9 +81,11 @@ class Toko1 extends BaseController
         $this->Toko1Model->save([
             'nama_barang'   => $this->request->getVar('nama_barang'),
             'jenis_barang' => $this->request->getVar('jenis_barang'),
-            'harga_barang'  => $this->request->getVar('harga_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
-            'gambar'        => $namaGambar
+            'gambar'        => $namaGambar,
+            'stok'          => $this->request->getVar('stok'),
+            'harga_beli'    => $this->request->getVar('harga_beli'),
+            'harga_jual'    => $this->request->getVar('harga_jual')
         ]);
 
         session()->setFlashdata('pesan', 'Barang berhasil ditambahkan');
@@ -112,11 +116,13 @@ class Toko1 extends BaseController
         if (!$this->validate([
             'nama_barang' => 'required',
             'jenis_barang' => 'required',
-            'harga_barang' => 'required|numeric',
             'deskripsi' => 'required',
             'gambar' => [
                 'rules' => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/png,image/jpg,image/jpeg]',
-            ]
+            ],
+            'stok' => 'required',
+            'harga_beli' => 'required|numeric',
+            'harga_jual' => 'required|numeric'
         ])) {
             return redirect()->to('/toko1/ubah/' . $idbarang)->withInput();
         }
@@ -144,9 +150,11 @@ class Toko1 extends BaseController
             'id_barang'     => $idbarang,
             'nama_barang'   => $this->request->getVar('nama_barang'),
             'jenis_barang' => $this->request->getVar('jenis_barang'),
-            'harga_barang'  => $this->request->getVar('harga_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
-            'gambar'        => $namaGambar
+            'gambar'        => $namaGambar,
+            'stok'          => $this->request->getVar('stok'),
+            'harga_beli'    => $this->request->getVar('harga_beli'),
+            'harga_jual'    => $this->request->getVar('harga_jual')
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah');

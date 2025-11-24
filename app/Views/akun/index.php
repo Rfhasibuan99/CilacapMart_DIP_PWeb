@@ -166,7 +166,8 @@ body {
     <div class="content">
         <h3><b>Akun Saya</b></h3>
         <br>
-
+            <?php if (!empty($user) && is_array($user)): ?>
+    <?php foreach ($user as $u): ?>
         <div class="pesanan-table" style="max-width:800px;">
             <div style="display:flex; gap:20px; align-items:flex-start;">
                 <div style="flex:0 0 120px; text-align:center;">
@@ -176,11 +177,11 @@ body {
                     <table style="width:100%; font-size:16px; border-collapse:collapse;">
                         <tr>
                             <th style="text-align:left; padding:8px 0; width:160px;">Nama Pengguna</th>
-                            <td style="padding:8px 0;">: <?= session()->get('username') ?? 'Belum diatur'; ?></td>
+                            <td style="padding:8px 0;">: <?= esc($u['username'])  ?? 'Belum diatur'; ?></td>
                         </tr>
                         <tr>
                             <th style="text-align:left; padding:8px 0;">Email</th>
-                            <td style="padding:8px 0;">: <?= session()->get('email') ?? 'Belum diatur'; ?></td>
+                            <td style="padding:8px 0;">: <?= esc($u['email']) ?? 'Belum diatur'; ?></td>
                         </tr>
                         <tr>
                             <th style="text-align:left; padding:8px 0;">Role</th>
@@ -191,7 +192,10 @@ body {
                             <td style="padding:8px 0;">: <?= session()->get('created_at') ? date('d/m/Y', strtotime(session()->get('created_at'))) : '-'; ?></td>
                         </tr>
                     </table>
-
+                <?php endforeach; ?>
+                <?php else: ?>
+                <p>Tidak ada data user ditemukan.</p>
+                <?php endif; ?>
                     <div style="margin-top:18px;">
                         <a href="/akun/edit" class="btn-detail" style="margin-right:10px;">Ubah Profil</a>
                         <a href="/akun/change-password" class="btn-detail" style="background:#6c757d;">Ubah Password</a>

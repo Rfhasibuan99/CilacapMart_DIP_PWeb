@@ -63,8 +63,8 @@
             <?php endif; ?>
 
             <div class="d-flex align-items-center gap-3">
-            <a href="/"><i class="bi bi-bag"></i></a>
-            <a href="/"><i class="bi bi-cart fs-4"></i></a>
+            <a href="/pesan"><i class="bi bi-bag"></i></a>
+            <a href="/keranjang"><i class="bi bi-cart fs-4"></i></a>
             <a href="/akun"><i class="bi bi-person-circle fs-4"></i></a>
         </div>
         </div>
@@ -84,37 +84,65 @@
         </div>
         </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Gambar </th>
-                        <th scope="col">Barang</th>
-                        <th scope="col">Jenis</th>
-                        <th scope="col">Deskripsi</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php $i = 1; ?>
-                <?php foreach ($toko1 as $a): ?>
-                <tr>
-                    <th scope="row"><?= $i++; ?></th>
-                    <td><img src="<?= base_url('img/'.$a['gambar']) ?>" alt="" width="80"></td>
-                    <td><?= esc($a['nama_barang']); ?></td>
-                    <td><?= esc($a['jenis_barang']); ?></td>
-                    <td><?= esc($a['deskripsi']); ?></td>
-                    <td><?= esc($a['harga_barang']); ?></td>
-                    <td>
-                     <a href="/toko1/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning">Ubah</a>
-                     <a href="/toko1/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger">Hapus</a>
-                     <a href="/toko1 <?= $a['id_barang']; ?>" class="btn btn-primary">Pesan</a>
-                     <a href="/toko1 <?= $a['id_barang']; ?>" class="btn btn-primary">Keranjang</a>
-                    </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
+             <!-- CARD DETAIL PRODUK -->
+        <div class="col-md-12">
+            <?php foreach ($toko1 as $a): ?>
+            <div class="card shadow-sm p-3 mb-4">
+
+                <div class="row g-4">
+                    <!-- GAMBAR PRODUK -->
+                    <div class="col-md-5 text-center">
+                        <img 
+                            src="<?= base_url('img/' . $a['gambar']) ?>" 
+                            onerror="this.src='https://via.placeholder.com/350x350?text=No+Image'"
+                            class="img-fluid rounded border"
+                            style="max-height: 350px; object-fit: cover;"
+                        >
+                    </div>
+
+                    <!-- DETAIL PRODUK -->
+                    <div class="col-md-7">
+
+                        <h4 class="fw-bold mb-2"><?= $a['nama_barang']; ?></h4>
+
+                        <h5 class="text-danger fw-bold mb-3">
+                            Rp <?= number_format($a['harga_jual'], 0, ',', '.'); ?>
+                        </h5>
+
+                        <div class="mb-3">
+                            <span class="text-muted">Harga Asli: </span>
+                            <span class="text-decoration-line-through">
+                                Rp <?= number_format($a['harga_beli'], 0, ',', '.'); ?>
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="fw-bold">Stok:</span> 
+                            <?= $a['stok']; ?> barang
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="fw-bold">Deskripsi Produk:</span>
+                            <p class="mt-1"><?= $a['deskripsi']; ?></p>
+                        </div>
+
+                        <!-- BUTTON AKSI -->
+                        <div class="d-flex gap-3 mt-4">
+
+                            <a href="/keranjang/<?= $a['id_barang']; ?>" class="btn btn-warning px-4">
+                                Tambah ke Keranjang
+                            </a>                        
+                                <a href="<?= base_url('/pesan/' . $a['id_barang']) ?>" class="btn btn-warning px-4">
+                                    pesan sekarang
+                                </a>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
         </div>
     </div>
 </div>

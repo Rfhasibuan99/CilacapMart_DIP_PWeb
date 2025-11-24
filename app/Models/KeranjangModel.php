@@ -11,6 +11,7 @@ class KeranjangModel extends Model
     protected $allowedFields = [
         'id_barang',
         'id_user',
+        'id_toko',
         'jumlah'
     ];
 }
