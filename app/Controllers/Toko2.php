@@ -100,7 +100,7 @@ class Toko2 extends BaseController
         $data = [
             'title' => 'Form Ubah Barang',
             'validation' => \Config\Services::validation(),
-            'toko2' => $this->toko2Model->getBarang($idbarang)
+            'toko2' => $this->Toko2Model->getBarang($idbarang)
         ];
 
         return view('toko2/ubah', $data);
@@ -111,7 +111,7 @@ class Toko2 extends BaseController
     // ======================
     public function update($idbarang)
     {
-        $dataLama = $this->toko2Model->getBarang($idbarang);
+        $dataLama = $this->Toko2Model->getBarang($idbarang);
 
         if (!$this->validate([
             'nama_barang' => 'required',
@@ -166,7 +166,7 @@ class Toko2 extends BaseController
     // ======================
     public function hapus($idbarang)
     {
-        $barang = $this->toko2Model->getBarang($idbarang);
+        $barang = $this->Toko2Model->getBarang($idbarang);
 
         // hapus gambar
         if ($barang['gambar'] && file_exists('img/' . $barang['gambar'])) {
