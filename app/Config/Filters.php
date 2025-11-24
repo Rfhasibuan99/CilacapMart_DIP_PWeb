@@ -39,7 +39,8 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'login'         => LoginFilter::class,
         'role'          => RoleFilter::class,
-        'permission'    => Permisssion::class,
+        'permission'    => PermissionFilter::class,
+
     ];
 
     /**
