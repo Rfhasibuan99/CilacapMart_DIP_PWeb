@@ -1,4 +1,4 @@
-<?=  $this->extend('layout/template') ?>
+<?= $this->extend('layout/template') ?>
 <?= $this->section('content');?>
 <style>body {
     background-color: #E0F2FE; /* Biru muda */
@@ -121,7 +121,7 @@ footer a:hover {
 
         <div class="d-flex align-items-center gap-3">
             <a href="/pesanan"><i class="bi bi-bag"></i></a>
-            <a href="/keranjang/index"><i class="bi bi-cart fs-4"></i></a>
+            <a href="/keranjang"><i class="bi bi-cart fs-4"></i></a>
             <a href="/akun"><i class="bi bi-person-circle fs-4"></i></a>
         </div>
     </div>

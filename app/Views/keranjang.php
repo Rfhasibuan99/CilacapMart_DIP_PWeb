@@ -138,7 +138,7 @@
         </form>
 
         <div class="d-flex align-items-center gap-3">
-            <i class="bi bi-cart fs-4"></i>
+            <a href="/keranjang" class="text-dark"><i class="bi bi-cart fs-4"></i></a>
             <i class="bi bi-person-circle fs-4"></i>
         </div>
     </div>

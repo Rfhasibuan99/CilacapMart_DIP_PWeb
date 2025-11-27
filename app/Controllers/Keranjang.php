@@ -75,7 +75,7 @@ class Keranjang extends BaseController
 
     public function tambah()
     {
-        $idUser = session()->get('id');
+        $idUser = session()->get('id_user');
         if (!$idUser) {
             return redirect()->to('/login')->with('error', 'Silahkan login terlebih dahulu');
         }
@@ -116,7 +116,6 @@ class Keranjang extends BaseController
         $cek = $this->keranjangModel
             ->where('id_barang', $idBarang)
             ->where('id_user', $idUser)
-            ->where('id_toko', $tokoIdToUse)
             ->first();
 
         if ($cek) {

@@ -164,7 +164,7 @@
                     <td><?= esc($a['nama_barang']); ?></td>
                     <td><?= esc($a['jenis_barang']); ?></td>
                     <td><?= esc($a['deskripsi']); ?></td>
-                    <td><?= esc($a['harga_barang']); ?></td>
+                    <td><?= esc($a['jenis_barang']); ?></td>
                     <td>
                      <a href="/toko1/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning">Ubah</a>
                      <a href="/toko1/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger">Hapus</a>
