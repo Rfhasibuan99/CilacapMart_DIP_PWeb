@@ -36,7 +36,7 @@
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link text-white rounded-3" href="/admin/pesanan">
+                <a class="nav-link text-white rounded-3" href="/admin/product">
                     <i class="bi bi-box-seam me-2"></i> Produk
                 </a>
             </li>
@@ -56,22 +56,16 @@
         </div>
     </div>
     <!-- Konten Utama -->
-<?= $this->extend('layout/template'); ?>
-
-<?= $this->section('title'); ?>
-<h2 class="mb-4">Dashboard Admin</h2>
-<?= $this->endSection(); ?>
-
-<?= $this->section('content'); ?>
-<div class="container">
-    <div class="p-4 bg-white rounded shadow-sm">
-        <h4>Selamat datang di Dashboard Admin</h4>
-        <p>Gunakan menu di sidebar untuk mengelola data.</p>
+        <div id="content" class="flex-grow-1 p-4">
+            <!-- Section untuk Title Halaman -->
+            <?= $this->renderSection('title') ?>
+            
+            <!-- Section untuk Konten Utama -->
+            <?= $this->renderSection('content') ?>
+        </div>
     </div>
-</div>
-<?= $this->endSection(); ?>
 
-<!-- Bootstrap JS -->
+<!-- Bootstrap JS -->x
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
