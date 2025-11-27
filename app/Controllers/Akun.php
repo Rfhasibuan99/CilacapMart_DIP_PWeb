@@ -1,42 +1,44 @@
 <?php
-
 namespace App\Controllers;
+
 use App\Models\AkunModel;
 
 class Akun extends BaseController
 {
-    protected $akunModel;
-    public function __construct()
+    public function index()
     {
-        $this->akunModel = new AkunModel();
+        $user = user(); // ← ambil user Myth/Auth
 
-    }
-    // ======================
-    // INDEX - DAFTAR AKUN
- public function index()
-    {
-        $akunModel = new AkunModel();
-
-        // contoh ambil user berdasarkan id login
-        $userId = session()->get('id');
-
-        $data['user'] = $this->akunModel->where('id', $userId)->findAll();
-
-        return view('akun/index', $data);
+        return view('akun/index', [
+            'title' => 'Akun Saya',
+            'user'  => $user
+        ]);
+    
     }
 
-    public function edit()
+    public function ubah()
     {
-        return view('akun/edit');
+        $user = user(); // ← user aktif
+
+        return view('akun/ubah', [
+            'title' => 'Ubah Akun',
+            'user' => $user,
+            'validation' => \Config\Services::validation()
+        ]);
     }
 
     public function update()
     {
-        // Logika untuk update akun
-        // Misalnya update username, email, dll.
-        // Untuk sementara, redirect kembali dengan pesan
-        session()->setFlashdata('pesan', 'Akun berhasil diupdate');
-        return redirect()->to('/akun');
-    }
+        $akunModel = new AkunModel();
+        $user = user(); // ← user aktif
 
+        $id = $user->id; // ← ID user dari Myth/Auth
+
+        $akunModel->update($id, [
+            'username' => $this->request->getPost('username'),
+            'email'    => $this->request->getPost('email'),
+        ]);
+
+        return redirect()->to('/akun')->with('success', 'Profil berhasil diperbarui.');
+    }
 }

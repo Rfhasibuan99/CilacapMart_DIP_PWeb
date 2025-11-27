@@ -11,7 +11,9 @@ class KeranjangModel extends Model
     protected $allowedFields = [
         'id_user',
         'id_barang',
+        'id_toko',
         'jumlah',
         'added_at'
     ];
+    protected $useTimestamps = false;
 }

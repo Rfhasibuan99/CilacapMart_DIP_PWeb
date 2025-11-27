@@ -2,7 +2,8 @@
 <?= $this->section('content'); ?>
 <style>
     body {
-        background-color: #E0F2FE; /* Biru muda */
+        background-color: #E0F2FE;
+        /* Biru muda */
         font-family: Arial, sans-serif;
     }
 
@@ -10,7 +11,7 @@
         background: white;
         padding: 25px;
         border-radius: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         margin-top: 30px;
     }
 
@@ -30,7 +31,7 @@
 
     .navbar-custom {
         background: white;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
 
     .btn-primary {
@@ -42,142 +43,161 @@
     .btn-primary:hover {
         background: #0078A8;
     }
+    footer {
+    background-color: #003366; /* BIRU TUA */
+    padding: 25px 50px;
+    color: #ffffff; /* TEKS PUTIH */
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+footer h6 {
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
 </style>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top main-nav">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="../../../../logo.png" alt="Cilacap Mart Logo" class="me-2" width="100px">
-                <span>Cilacap Mart</span>
-            </a>
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="../../../../logo.png" alt="Cilacap Mart Logo" class="me-2" width="100px">
+            <span>Cilacap Mart</span>
+        </a>
 
-           <form action="<?= site_url('/toko1'); ?>" method="get">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Masukkan Pencarian Barang" name="cari" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-secondary" type="submit">Cari</button>
-                </div>
-            </form>
-            <?php if (session()->getFlashdata('pesan')): ?>
-                <div class="alert alert-success" role="alert">
-                    <?= session()->getFlashdata('pesan'); ?>
-                </div>
-            <?php endif; ?>
+        <form action="<?= site_url('/toko1'); ?>" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Masukkan Pencarian Barang" name="cari" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="submit">Cari</button>
+            </div>
+        </form>
+        <?php if (session()->getFlashdata('pesan')): ?>
+            <div class="alert alert-success" role="alert">
+                <?= session()->getFlashdata('pesan'); ?>
+            </div>
+        <?php endif; ?>
 
-            <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3">
             <a href="/pesan"><i class="bi bi-bag"></i></a>
             <a href="/keranjang"><i class="bi bi-cart fs-4"></i></a>
             <a href="/akun"><i class="bi bi-person-circle fs-4"></i></a>
         </div>
-        </div>
-    </nav>
+    </div>
+</nav>
 
 <div class="container">
     <div class="row">
         <div class="col">
             <h2>Daftar Barang Toko</h2>
-        
-        <div class="container mt-3">
-        <div class="row">
-        <div class="col text-end">
-            <!-- <a href="layout/ubah" class="btn btn-secondary">Ubah Toko</a> -->
-            <a href="/toko1/tambah" class="btn btn-primary">Tambah Barang</a>
-         </div>
-        </div>
-        </div>
 
-             <!-- CARD DETAIL PRODUK -->
-        <div class="col-md-12">
-            <?php foreach ($toko1 as $a): ?>
-            <div class="card shadow-sm p-3 mb-4">
-
-                <div class="row g-4">
-                    <!-- GAMBAR PRODUK -->
-                    <div class="col-md-5 text-center">
-                        <img 
-                            src="<?= base_url('img/' . $a['gambar']) ?>" 
-                            onerror="this.src='https://via.placeholder.com/350x350?text=No+Image'"
-                            class="img-fluid rounded border"
-                            style="max-height: 350px; object-fit: cover;"
-                        >
-                    </div>
-
-                    <!-- DETAIL PRODUK -->
-                    <div class="col-md-7">
-
-                        <h4 class="fw-bold mb-2"><?= $a['nama_barang']; ?></h4>
-
-                        <h5 class="text-danger fw-bold mb-3">
-                            Rp <?= number_format($a['harga_jual'], 0, ',', '.'); ?>
-                        </h5>
-
-                        <div class="mb-3">
-                            <span class="text-muted">Harga Asli: </span>
-                            <span class="text-decoration-line-through">
-                                Rp <?= number_format($a['harga_beli'], 0, ',', '.'); ?>
-                            </span>
+            <div class="container mt-3">
+                <div class="row">
+                    <?php if (in_groups('admin')): ?>
+                        <div class="col text-end">
+                            <!-- <a href="layout/ubah" class="btn btn-secondary">Ubah Toko</a> -->
+                            <a href="/toko1/tambah" class="btn btn-primary">Tambah Barang</a>
                         </div>
-
-                        <div class="mb-3">
-                            <span class="fw-bold">Stok:</span> 
-                            <?= $a['stok']; ?> barang
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="fw-bold">Deskripsi Produk:</span>
-                            <p class="mt-1"><?= $a['deskripsi']; ?></p>
-                        </div>
-
-                        <!-- BUTTON AKSI -->
-                        <div class="d-flex gap-3 mt-4">
-
-                            <a href="/keranjang/<?= $a['id_barang']; ?>" class="btn btn-warning px-4">
-                                Tambah ke Keranjang
-                            </a>                        
-                                <a href="<?= base_url('/pesan/' . $a['id_barang']) ?>" class="btn btn-warning px-4">
-                                    pesan sekarang
-                                </a>
-
-                        </div>
-
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
-            <?php endforeach; ?>
-        </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Gambar </th>
-                        <th scope="col">Barang</th>
-                        <th scope="col">Jenis</th>
-                        <th scope="col">Deskripsi</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php $i = 1; ?>
+
+            <!-- CARD DETAIL PRODUK -->
+            <div class="col-md-12">
                 <?php foreach ($toko1 as $a): ?>
-                <tr>
-                    <th scope="row"><?= $i++; ?></th>
-                    <td><img src="<?= base_url('img/'.$a['gambar']) ?>" alt="" width="80"></td>
-                    <td><?= esc($a['nama_barang']); ?></td>
-                    <td><?= esc($a['jenis_barang']); ?></td>
-                    <td><?= esc($a['deskripsi']); ?></td>
-                    <td><?= esc($a['harga_barang']); ?></td>
-                    <td>
-                     <a href="/toko1/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning">Ubah</a>
-                     <a href="/toko1/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger">Hapus</a>
-                     <a href="/toko1 <?= $a['id_barang']; ?>" class="btn btn-primary">Pesan</a>
-                     <a href="/toko1/keranjang <?= $a['id_barang']; ?>" class="btn btn-primary">Keranjang</a>
-                    </td>
-                    </tr>
+                    <div class="card shadow-sm p-3 mb-4">
+
+                        <div class="row g-4">
+                            <!-- GAMBAR PRODUK -->
+                            <div class="col-md-5 text-center">
+                                <img
+                                    src="<?= base_url('img/' . $a['gambar']) ?>"
+                                    onerror="this.src='https://via.placeholder.com/350x350?text=No+Image'"
+                                    class="img-fluid rounded border"
+                                    style="max-height: 350px; object-fit: cover;">
+                            </div>
+
+                            <!-- DETAIL PRODUK -->
+                            <div class="col-md-7">
+
+                                <h4 class="fw-bold mb-2"><?= $a['nama_barang']; ?></h4>
+
+                                <h5 class="text-danger fw-bold mb-3">
+                                    Rp <?= number_format($a['harga_jual'], 0, ',', '.'); ?>
+                                </h5>
+                                <?php if (in_groups('admin')): ?>
+                                    <div class="mb-3">
+                                        <span class="text-muted">Harga Asli: </span>
+                                        <span class="text-decoration-line-through">
+                                            Rp <?= number_format($a['harga_beli'], 0, ',', '.'); ?>
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="mb-3">
+                                    <span class="fw-bold">Stok:</span>
+                                    <?= $a['stok']; ?> barang
+                                </div>
+
+                                <div class="mb-3">
+                                    <span class="fw-bold">Deskripsi Produk:</span>
+                                    <p class="mt-1"><?= $a['deskripsi']; ?></p>
+                                </div>
+
+                                <!-- BUTTON AKSI -->
+                                <div class="d-flex gap-3 mt-4">
+                                    <!-- di dalam loop produk $barang -->
+                                    <form action="/keranjang/tambah" method="post" class="d-inline">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="id_barang" value="<?= esc($a['id_barang']) ?>">
+                                        <input type="hidden" name="toko" value="1"> <!-- angka sesuai toko -->
+                                        <input type="hidden" name="jumlah" value="1">
+                                        <button type="submit" class="btn btn-primary">Tambah ke Keranjang</button>
+                                    </form>
+
+
+                                    <a href="<?= base_url('/pesan/' . $a['id_barang']) ?>" class="btn btn-warning px-4">
+                                        pesan sekarang
+                                    </a>
+                                    <?php if (in_groups('admin')): ?>
+                                        <a href="/toko1/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning px-4">
+                                            Ubah
+                                        </a>
+                                        <a href="/toko1/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger px-4">
+                                            Hapus
+                                        </a>
+                                    <?php endif; ?>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </tbody>
+            </div>
         </div>
     </div>
-</div>
-<!-- <div class="container mt-3">
+    <footer>
+        <div>
+            <h6>Layanan Pelanggan</h6>
+            Bantuan<br>Lacak Pengiriman Penjual<br>Lacak Pesanan Pembeli<br>Hubungi Kami
+        </div>
+        <div>
+            <h6>Jelajahi Cilacap Mart</h6>
+            Tentang Kami<br>Seller Centre<br>Kontak Media
+        </div>
+        <div><h6>Pembayaran</h6></div>
+        <div><h6>Pengiriman</h6></div>
+    </footer>
+    <!-- <div class="container mt-3">
     <div class="row">
         <div class="col text-end">
             <a href="/toko1/tambah" class="btn btn-primary">Tambah Barang</a>
@@ -185,4 +205,4 @@
     </div>
 </div> -->
 
-<?= $this->endSection(); ?>
+    <?= $this->endSection(); ?>

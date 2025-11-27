@@ -29,7 +29,7 @@
                         type="text" 
                         class="form-control"
                         name="alamat_toko"
-                        value="<?= old('alamat_toko'); ?>"
+                        value="<?= old('alamat'); ?>"
                         required>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                         class="form-control"
                         name="deskripsi_toko"
                         rows="3"
-                        required><?= old('deskripsi_toko'); ?></textarea>
+                        required><?= old('deskripsi'); ?></textarea>
                 </div>
             </div>
 

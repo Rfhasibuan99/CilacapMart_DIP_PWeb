@@ -186,31 +186,6 @@ select {
 }
 
 </style>
-
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top main-nav">
-    <div class="container-fluid px-4">
-
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <img src="../../../../logo.png" alt="Cilacap Mart Logo" class="me-2" width="100px">
-            <span>Cilacap Mart</span>
-        </a>
-
-        <form action="<?= site_url('/rio'); ?>" method="get" class="d-flex">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Masukkan Pencarian Barang" name="cari">
-                <button class="btn btn-outline-secondary" type="submit">Cari</button>
-            </div>
-        </form>
-
-       <div class="d-flex align-items-center gap-3">
-            <a href="/pesanan"><i class="bi bi-bag"></i></a>
-            <a href="/keranjang"><i class="bi bi-cart fs-4"></i></a>
-            <a href="/akun"><i class="bi bi-person-circle fs-4"></i></a>
-        </div>
-    </div>
-</nav>
-
 <!-- LAYOUT -->
 <div class="main-wrapper">
 

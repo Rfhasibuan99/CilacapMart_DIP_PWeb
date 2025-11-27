@@ -5,17 +5,23 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+$routes->get('/', 'Home::index');
 $routes->get('/', 'Page::index');
 $routes->get('/akun', 'Akun::index');
-$routes->get('/akun/edit', 'Akun::edit');
+$routes->get('/akun/ubah', 'Akun::ubah');
 $routes->post('/akun/update', 'Akun::update');
+
 $routes->get('/notifikasi', 'Notifikasi::index');
 $routes->get('/chat', 'Chat::index');
 
+
 $routes->get('/keranjang', 'Keranjang::index');
+$routes->get('keranjang/index', 'Keranjang::index');
 $routes->post('/keranjang/tambah', 'Keranjang::tambah');
 $routes->get('/keranjang/hapus/(:num)', 'Keranjang::hapus/$1');
-$routes->get('/keranjang/tambah/(:num)', 'Keranjang::tambah/$1');
+$routes->get('/pesanan/checkout', 'Keranjang::checkout'); // sederhana
+
+
 
 
 $routes->get('/pesanan', 'Pesanan::index');
@@ -27,11 +33,11 @@ $routes->post('/pesanan/update-status/(:num)', 'Pesanan::updateStatus/$1');
 
 // layout routes
 // $routes->get('/layout', 'layout::index');
-$routes->get('/layout/tambah', 'Dashboard::tambah');
-$routes->post('/layout/simpan', 'Dashboard::simpan');
-$routes->get('/layout/ubah/(:num)', 'Dashboard::ubah/$1');
-$routes->put('/layout/update/(:num)', 'Dashboard::update/$1');
-$routes->get('/layout/hapus/(:num)', 'Dashboard::hapus/$1');
+$routes->get('/layout/tambah', 'Home::tambah');
+$routes->post('/layout/simpan', 'Home::simpan');
+$routes->get('/layout/ubah/(:num)', 'Home::ubah/$1');
+$routes->put('/layout/update/(:num)', 'Home::update/$1');
+$routes->get('/layout/hapus/(:num)', 'Home::hapus/$1');
 
 // folder toko1 untuk Toko Jajan Koe
 $routes->get('/toko1', 'Toko1::index');
@@ -80,6 +86,5 @@ $routes->get('auth/google/callback', 'SocialAuth::googleCallback');
 $routes->get('auth/apple', 'SocialAuth::apple');
 $routes->post('auth/apple/callback', 'SocialAuth::appleCallback');
 
-
-$routes->get('admin', 'admin\Dashboard::index'); // Dashboard admin
-$routes->get('admin/pesanan', 'admin\Dashboard::pesanan'); // Halaman produk di dashboard admin
+// $routes->get('admin', 'admin\Home::index'); // Home admin
+// $routes->get('admin/pesanan', 'admin\Home::pesanan'); // Halaman produk di Home admin

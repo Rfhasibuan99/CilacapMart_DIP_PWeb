@@ -100,113 +100,39 @@ footer a:hover {
     text-decoration: underline;
 }
 </style>
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top main-nav">
-    <div class="container-fluid px-4">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <img src="../../../../logo.png" alt="Cilacap Mart Logo" class="me-2" width="100px">
-            <span>Cilacap Mart</span>
-        </a>
-
-        <form action="<?= site_url('/'); ?>" method="get">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Masukkan Pencarian Barang" name="cari" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-secondary" type="submit">Cari</button>
-                </div>
-            </form>
-            <?php if (session()->getFlashdata('pesan')): ?>
-                <div class="alert alert-success" role="alert">
-                    <?= session()->getFlashdata('pesan'); ?>
-                </div>
-            <?php endif; ?>
-
-        <div class="d-flex align-items-center gap-3">
-            <a href="/pesanan"><i class="bi bi-bag"></i></a>
-            <a href="/keranjang/index"><i class="bi bi-cart fs-4"></i></a>
-            <a href="/akun"><i class="bi bi-person-circle fs-4"></i></a>
-        </div>
-    </div>
-</nav>
-
 <div class="container mt-4">
     <h1>Selamat Datang Di CilacapMart</h1>
 
-    <div class="row mt-3">
-
+<div class="row mt-3">
+<?php if (in_groups('admin')): ?>
+<div class="col text-end">
+            <!-- <a href="layout/ubah" class="btn btn-secondary">Ubah Toko</a> -->
+            <a href="/layout/tambah" class="btn btn-primary">Tambah Toko</a>
+         </div>
+<?php endif; ?>
+<span></span>
         <!-- CARD TOKO (Template) -->
-        <?php
-        $tokoList = [
-            [
-                'nama' => 'Jajan Koe', 
-                'link' => '/toko1',
-                'img'  => '/img/jajankoe.jpg',
-                'deksripsi' => 'Jajan Koe adalah toko yang menjual beraneka 
-                ragam roti khas Cilacap dengan cita rasa autentik dan selalu fresh setiap hari. 
-                Kami menghadirkan berbagai pilihan roti manis, gurih, hingga jajanan tradisional yang 
-                cocok untuk camilan keluarga, acara spesial, atau oleh-oleh.',
-
-                'alamat' => 'Jl. Gatot Subroto No.128, Karang Lor, Gunungsimping,
-                Kec. Cilacap Tengah, Kabupaten Cilacap.',
-                'nomor' => '08226628282',
-                'jam' => '08.00 - 21.00 WIB'
-            ],
-            [
-                'nama' => 'Cemiland',
-                'link' => '/toko2',
-                'img'  => '/img/cemiland2.jpg',
-                'deksripsi' => 'Cemilland_ adalah toko yang menjual berbagai olahan cemilan khas Cilacap dengan rasa autentik dan kualitas terbaik. 
-                Tersedia aneka camilan renyah, gurih, manis, dan oleh-oleh khas daerah yang cocok untuk ngemil santai ataupun dijadikan buah tangan.',
-                'alamat' => 'Pertokoan Semarak Town House, Kios No. 11 Jl. Dr. Sutomo, Cilacap, Jawa Tengah, Indonesia',
-                'nomor' => '0876-55445',
-                'jam' => '08.00 - 21.00 WIB'
-            ],
-            [
-                'nama' => 'Grek',
-                'link' => '/toko3',
-                'img'  => '/img/grek.jpg',
-                'deksripsi' => 'Grek adalah toko yang menjual bubuk kopi dan coklat berkualitas dengan rasa khas Cilacap. Kami menyediakan berbagai varian kopi dan coklat pilihan yang cocok untuk penikmat minuman hangat, pelaku usaha minuman, maupun untuk stok harian di rumah.',
-                'alamat' => 'Jl. Kendeng, Cilacap, Jawa Tengah',
-                'nomor' => '0812-5566-9900',
-                'jam' => '09.30 - 22.00 WIB'
-            ],
-            [
-                'nama' => 'Handcraft',
-                'link' => '/toko4',
-                'img'  => '/img/handcraft.jpg',
-                'deksripsi' => 'Handcraft adalah toko yang menjual berbagai kerajinan tangan unik buatan lokal Cilacap. Setiap produk dibuat secara manual dengan kualitas terjaga—mulai dari dekorasi rumah, aksesori, hingga souvenir yang cocok untuk hadiah maupun kebutuhan acara.',
-                'alamat' => 'Cipari, Cilacap, Jawa Tengah',
-                'nomor' => '0812-5566-9900',
-                'jam' => '08.00 - 21.00 WIB'
-            ],
-            [
-                'nama' => 'WS Jaya Cilacap',
-                'link' => '/toko5',
-                'img'  => '/img/wsjaya.jpg',
-                'deksripsi' => 'WS Jaya Cilacap menjual berbagai jenis ikan kering hasil laut yang diproduksi langsung dari nelayan lokal Cilacap. Produk tersedia dalam kondisi bersih, berkualitas, dan tahan lama—cocok untuk kebutuhan rumah tangga, usaha kuliner, maupun oleh-oleh khas daerah pesisir.',
-                'alamat' => 'Cilacap, Jawa Tengah',
-                'nomor' => '0812-5566-9900',
-                'jam' => '08.00 - 20.00 WIB'
-            ]
-        ];
-        ?>
-
-        <?php foreach ($tokoList as $t): ?>
+        <?php foreach ($shop as $t): 
+            $t['link'] = '/toko' . $t['id_toko'];
+            $t['gambar'] = base_url('img/' . $t['gambar']); 
+            ?>
         <div class="col-sm-12 col-md-6 mb-4">
-            <h4><?= $t['nama'] ?></h4>
+            <h4><?= $t['nama_toko'] ?></h4>
 
             <div class="card shadow-sm">
                 <div class="row g-0">
 
                     <!-- GAMBAR TOKO -->
                     <div class="col-md-4">
-                        <img src="<?= $t['img'] ?>" 
+                        <img src="<?= $t['gambar'] ?>" 
                              class="img-fluid rounded-start" 
-                             alt="Foto <?= $t['nama'] ?>">
+                             alt="Foto <?= $t['nama_toko'] ?>">
                     </div>
 
                     <!-- KETERANGAN -->
                     <div class="col-md-8">
                         <div class="card-body">
-                            <p class="card-title"><?= $t['deksripsi'] ?></p>
+                            <p class="card-title"><?= $t['deskripsi'] ?></p>
 
                             <p><b>Alamat Toko:</b><?= $t['alamat'] ?></p>
                             <p><b>Nomor Telepon:</b><?= $t['nomor'] ?></p>
@@ -215,6 +141,10 @@ footer a:hover {
                             <a href="<?= $t['link'] ?>" class="btn btn-primary mt-2">
                                 Detail Toko
                             </a>
+                            <?php if (in_groups('admin')): ?>
+                            <!-- <a href="layout/ubah" class="btn btn-secondary">Ubah Toko</a> -->
+                            <a href="/layout/ubah" class="btn btn-primary">Ubah Toko</a>
+                            <?php endif; ?>
                         </div>
                     </div>
 

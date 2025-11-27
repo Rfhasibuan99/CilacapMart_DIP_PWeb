@@ -78,7 +78,7 @@ class Toko2 extends BaseController
         $fileGambar->move('img', $namaGambar);
 
         // simpan
-        $this->toko2Model->save([
+        $this->Toko2Model->save([
             'nama_barang'   => $this->request->getVar('nama_barang'),
             'jenis_barang' => $this->request->getVar('jenis_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
@@ -146,7 +146,7 @@ class Toko2 extends BaseController
         }
 
         // simpan update
-        $this->toko2Model->save([
+        $this->Toko2Model->save([
             'id_barang'     => $idbarang,
             'nama_barang'   => $this->request->getVar('nama_barang'),
             'jenis_barang' => $this->request->getVar('jenis_barang'),

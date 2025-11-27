@@ -148,36 +148,33 @@ body {
 .btn-primary:hover {
     background-color: #007aa1;
 }
+footer {
+    background-color: #003366; /* BIRU TUA */
+    padding: 25px 50px;
+    color: #ffffff; /* TEKS PUTIH */
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+footer h6 {
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
 </style>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top main-nav">
-    <div class="container-fluid px-4">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <img src="../../../../logo.png" alt="Cilacap Mart Logo" class="me-2" width="100px">
-            <span>Cilacap Mart</span>
-        </a>
-
-        <form action="<?= site_url('/rio'); ?>" method="get" class="d-flex">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Masukkan Pencarian Barang" name="cari">
-                <button class="btn btn-outline-secondary" type="submit">Cari</button>
-            </div>
-        </form>
-
-        <?php if (session()->getFlashdata('pesan')): ?>
-            <div class="alert alert-success ms-3 mb-0" role="alert">
-                <?= session()->getFlashdata('pesan'); ?>
-            </div>
-        <?php endif; ?>
-
-        <div class="d-flex align-items-center gap-3">
-            <a href="/"><i class="bi bi-bag"></i></a>
-            <a href="/keranjang"><i class="bi bi-cart fs-4"></i></a>
-            <a href="/akun"><i class="bi bi-person-circle fs-4"></i></a>
-        </div>
-    </div>
-</nav>
 
 <!-- MAIN WRAPPER -->
 <div class="main-wrapper">
@@ -188,7 +185,7 @@ body {
             <i class="bi bi-person-circle"></i>
             <div>
                 <b><?= session()->get('username') ?? 'Username'; ?></b><br>
-                <a style="font-size: 13px; color: gray; cursor:pointer;" href="/akun/edit">Ubah Profil</a>
+                <a style="font-size: 13px; color: gray; cursor:pointer;" href="/akun/ubah">Ubah Profil</a>
             </div>
         </div>
 
@@ -216,12 +213,13 @@ body {
 
                 <div class="form-group">
                     <label for="username">Nama Pengguna</label>
-                    <input type="text" id="username" name="username" value="<?= session()->get('username') ?? ''; ?>" required>
+                    <input type="text" name="username" value="<?= esc($user->username) ?>" required>
+
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?= session()->get('email') ?? ''; ?>" required>
+                        <input type="email" id="email" name="email" value="<?= esc($user->email) ?>" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
@@ -230,5 +228,16 @@ body {
     </div>
 
 </div>
-
+<footer>
+        <div>
+            <h6>Layanan Pelanggan</h6>
+            Bantuan<br>Lacak Pengiriman Penjual<br>Lacak Pesanan Pembeli<br>Hubungi Kami
+        </div>
+        <div>
+            <h6>Jelajahi Cilacap Mart</h6>
+            Tentang Kami<br>Seller Centre<br>Kontak Media
+        </div>
+        <div><h6>Pembayaran</h6></div>
+        <div><h6>Pengiriman</h6></div>
+    </footer>
 <?= $this->endSection(); ?>
