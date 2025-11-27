@@ -9,7 +9,7 @@
             <div class="alert alert-danger"><?= session()->getFlashdata('error'); ?></div>
         <?php endif; ?>
 
-        <form action="/toko1/simpan" method="post" class="mt-4" enctype="multipart/form-data">
+        <form action="/toko4/simpan" method="post" class="mt-4" enctype="multipart/form-data">
             <?= csrf_field(); ?>
 
             <!-- Nama Barang -->
