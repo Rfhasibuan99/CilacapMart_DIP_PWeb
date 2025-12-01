@@ -1,4 +1,4 @@
-ll<?php
+<?php
 
 use CodeIgniter\Router\RouteCollection;
 
@@ -13,6 +13,7 @@ $routes->get('/notifikasi', 'Notifikasi::index');
 $routes->get('/chat', 'Chat::index');
 
 $routes->get('/keranjang', 'Keranjang::index');
+$routes->get('keranjang/index/(:num)', 'Keranjang::index/$1');
 $routes->post('/keranjang/tambah', 'Keranjang::tambah');
 $routes->get('/keranjang/hapus/(:num)', 'Keranjang::hapus/$1');
 $routes->get('/keranjang/tambah/(:num)', 'Keranjang::tambah/$1');
@@ -82,4 +83,5 @@ $routes->post('auth/apple/callback', 'SocialAuth::appleCallback');
 
 
 $routes->get('admin', 'admin\Dashboard::index'); // Dashboard admin
+$routes->get('admin/barang', 'admin\Dashboard::barang'); // Dashboard admin
 $routes->get('admin/pesanan', 'admin\Dashboard::pesanan'); // Halaman produk di dashboard admin

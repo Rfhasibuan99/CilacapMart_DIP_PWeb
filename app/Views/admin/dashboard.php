@@ -36,12 +36,12 @@
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link text-white rounded-3" href="/admin/product">
-                    <i class="bi bi-box-seam me-2"></i> Produk
+                <a class="nav-link text-white rounded-3" href="/admin/barang">
+                    <i class="bi bi-box-seam me-2"></i> Barang
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link text-white rounded-3" href="/admin/orders">
+                <a class="nav-link text-white rounded-3" href="/admin/pesanan">
                     <i class="bi bi-cart-check me-2"></i> Pesanan
                 </a>
             </li>

@@ -122,6 +122,11 @@
                         </div>
 
                         <div class="mb-3">
+                            <span class="fw-bold">jenis:</span> 
+                            <?= $a['jenis_barang']; ?>
+                        </div>
+
+                        <div class="mb-3">
                             <span class="fw-bold">Deskripsi Produk:</span>
                             <p class="mt-1"><?= $a['deskripsi']; ?></p>
                         </div>
@@ -143,40 +148,7 @@
             </div>
             <?php endforeach; ?>
         </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Gambar </th>
-                        <th scope="col">Barang</th>
-                        <th scope="col">Jenis</th>
-                        <th scope="col">Deskripsi</th>
-                        <th scope="col">Harga</th>
-                        <th scope="col">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php $i = 1; ?>
-                <?php foreach ($toko1 as $a): ?>
-                <tr>
-                    <th scope="row"><?= $i++; ?></th>
-                    <td><img src="<?= base_url('img/'.$a['gambar']) ?>" alt="" width="80"></td>
-                    <td><?= esc($a['nama_barang']); ?></td>
-                    <td><?= esc($a['jenis_barang']); ?></td>
-                    <td><?= esc($a['deskripsi']); ?></td>
-                    <td><?= esc($a['jenis_barang']); ?></td>
-                    <td>
-                     <a href="/toko1/ubah/<?= $a['id_barang']; ?>" class="btn btn-warning">Ubah</a>
-                     <a href="/toko1/hapus/<?= $a['id_barang']; ?>" class="btn btn-danger">Hapus</a>
-                     <a href="/toko1 <?= $a['id_barang']; ?>" class="btn btn-primary">Pesan</a>
-                     <a href="/toko1/keranjang <?= $a['id_barang']; ?>" class="btn btn-primary">Keranjang</a>
-                    </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </div>
-    </div>
-</div>
+
 <!-- <div class="container mt-3">
     <div class="row">
         <div class="col text-end">

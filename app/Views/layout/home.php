@@ -110,7 +110,7 @@ footer a:hover {
         <form action="<?= site_url('/'); ?>" method="get">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Masukkan Pencarian Barang" name="cari" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-secondary" type="submit">Cari</button>
+                    <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i>&nbsp;Cari</button>
                 </div>
             </form>
             <?php if (session()->getFlashdata('pesan')): ?>

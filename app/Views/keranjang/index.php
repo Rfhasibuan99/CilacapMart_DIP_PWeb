@@ -2,123 +2,189 @@
 <?= $this->section('content'); ?>
 
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #ffffff;
-    }
+/* ====== GLOBAL ======= */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #E0F2FE; /* Biru muda lembut */
+}
 
-    /* HEADER */
-    .header {
-        width: 100%;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 30px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-        background: white;
-    }
+/* ====== NAVBAR ======= */
+.main-nav {
+    background-color: #0096C7 !important; /* Biru utama */
+}
 
-    /* LAYOUT FLEX */
-    .main-wrapper {
-        display: flex;
-        padding: 30px;
-        gap: 30px;
-    }
+.navbar-brand span {
+    color: white !important;
+    font-weight: 600;
+}
 
-    /* SIDEBAR */
-    .sidebar {
-        width: 250px;
-    }
+.main-nav i {
+    color: white !important;
+}
 
-    .profile {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 25px;
-    }
+.input-group .form-control {
+    border-color: #0096C7;
+}
 
-    .profile i {
-        font-size: 40px;
-    }
+.input-group .btn {
+    background-color: #0096C7;
+    color: white;
+    border-color: #0096C7;
+}
 
-    .menu-item {
-        display: flex;
-        align-items: center;
-        font-size: 17px;
-        padding: 10px 0;
-        cursor: pointer;
-    }
+.input-group .btn:hover {
+    background-color: #007aa1;
+}
 
-    .menu-item i {
-        margin-right: 12px;
-        font-size: 25px;
-    }
+/* ====== LAYOUT ======= */
+.main-wrapper {
+    display: flex;
+    padding: 30px;
+    gap: 30px;
+}
 
-    .yellow-icon {
-        color: #f5c400;
-        font-size: 27px;
-    }
+/* ====== SIDEBAR ======= */
+.sidebar {
+    width: 250px;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+}
 
-    /* MAIN CONTENT */
-    .content {
-        flex: 1;
-        background: #dff0ff;
-        border-radius: 20px;
-        padding: 20px;
-        min-height: 520px;
-    }
+/* Profile */
+.profile i {
+    font-size: 45px;
+    color: #0096C7;
+}
 
-    .logout-icon {
-        color: #ff3333;
-        font-size: 25px;
-    }
+.profile a {
+    color: #007aa1;
+    text-decoration: underline;
+}
 
-    /* CART TABLE */
-    .cart-table {
-        width: 100%;
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-    }
+/* Menu Item */
+.menu-item {
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    padding: 12px 5px;
+    border-radius: 12px;
+    transition: 0.2s;
+}
 
-    .cart-table table {
-        width: 100%;
-    }
+.menu-item a {
+    color: #003049;
+    text-decoration: none;
+}
 
-    .cart-table th,
-    .cart-table td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-    }
+.menu-item i {
+    margin-right: 12px;
+    font-size: 23px;
+    color: #0096C7;
+}
 
-    .cart-img {
-        width: 60px;
-        height: 60px;
-        border-radius: 10px;
-        object-fit: cover;
-    }
+/* Hover efek */
+.menu-item:hover {
+    background: #E0F2FE;
+    transform: translateX(6px);
+}
 
-    .btn-hapus {
-        background: #ff4d4d;
-        color: white;
-        border: none;
-        padding: 5px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-    }
+/* Point Icon */
+.yellow-icon {
+    color: #f5c400 !important;
+}
 
-    .btn-checkout {
-        margin-top: 20px;
-        background: #008cff;
-        color: white;
-        padding: 12px;
-        width: 200px;
-        border-radius: 10px;
-        border: none;
-        float: right;
-    }
+/* Logout Icon */
+.logout-icon {
+    color: red !important;
+}
+
+/* ====== MAIN CONTENT ======= */
+.content {
+    flex: 1;
+    background: #E0F2FE;
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 520px;
+}
+
+/* BOX WRAPPER TABEL */
+.pesanan-table {
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+/* TABLE */
+.pesanan-table table {
+    width: 100%;
+    font-size: 16px;
+}
+
+.pesanan-table th {
+    background: #0096C7;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.pesanan-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dce7ef;
+}
+
+/* STATUS BADGES */
+.status-pending {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.status-diproses {
+    color: #0096C7;
+    font-weight: bold;
+}
+
+.status-dikirim {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-selesai {
+    color: #6c757d;
+    font-weight: bold;
+}
+
+.status-dibatalkan {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* BUTTON DETAIL */
+.btn-detail {
+    background: #0096C7;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-detail:hover {
+    background: #007aa1;
+}
+
+/* ADMIN UPDATE SELECT */
+select {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #0096C7;
+}
+
 </style>
 
 <!-- NAVBAR -->
@@ -126,7 +192,7 @@
     <div class="container-fluid px-4">
 
         <a class="navbar-brand d-flex align-items-center" href="/">
-            <img src="../../../../logo.jpg" alt="Cilacap Mart Logo" class="me-2" width="100px">
+            <img src="../../../../logo.png" alt="Cilacap Mart Logo" class="me-2" width="100px">
             <span>Cilacap Mart</span>
         </a>
 
@@ -137,9 +203,10 @@
             </div>
         </form>
 
-        <div class="d-flex align-items-center gap-3">
-            <a href="/keranjang" class="text-dark"><i class="bi bi-cart fs-4"></i></a>
-            <i class="bi bi-person-circle fs-4"></i>
+       <div class="d-flex align-items-center gap-3">
+            <a href="/pesanan"><i class="bi bi-bag"></i></a>
+            <a href="/keranjang"><i class="bi bi-cart fs-4"></i></a>
+            <a href="/akun"><i class="bi bi-person-circle fs-4"></i></a>
         </div>
     </div>
 </nav>
@@ -158,10 +225,10 @@
         </div>
 
         <div class="menu">
-            <div class="menu-item"><i class="bi bi-person"></i> Akun Saya</div>
-            <div class="menu-item"><i class="bi bi-bag"></i> Pesanan Saya</div>
-            <div class="menu-item"><i class="bi bi-bell"></i> Notifikasi</div>
-            <div class="menu-item"><i class="bi bi-coin yellow-icon"></i> Point Saya</div>
+            <div class="menu-item"><a href="/akun"><i class="bi bi-person"></i> Akun Saya</a></div>
+            <div class="menu-item"><a href="/pesanan"><i class="bi bi-bag"></i> Pesanan Saya</a></div>
+            <div class="menu-item"><a href="/"><i class="bi bi-bell"></i> Notifikasi</a></div>
+            <div class="menu-item"><a href="/"><i class="bi bi-coin yellow-icon"></i> Point Saya</a></div>
             <div class="menu-item">
                 <a href="/logout" style="text-decoration:none; color:inherit;">
                     <i class="bi bi-box-arrow-right logout-icon"></i> Logout
@@ -173,39 +240,50 @@
     <!-- MAIN CONTENT -->
     <div class="content">
 
-        <h3><b>Keranjang Belanja</b></h3>
+        <h3><b>Daftar Pesanan</b></h3>
         <br>
 
-        <div class="cart-table">
+        <div class="pesanan-table">
 
             <table>
                 <tr>
-                    <th>Gambar</th>
-                    <th>Nama Barang</th>
-                    <th>Harga</th>
-                    <th>Qty</th>
-                    <th>Total</th>
+                    <th>ID Pesanan</th>
+                    <th>Tanggal</th>
+                    <th>Total Harga</th>
+                    <th>Status</th>
                     <th>Aksi</th>
                 </tr>
 
-                <?php if (!empty($keranjang)) : ?>
-                    <?php foreach ($keranjang as $item): ?>
+                <?php if (!empty($pesanan)) : ?>
+                    <?php foreach ($pesanan as $item): ?>
                     <tr>
-                        <td><img src="/img/<?= $item['gambar']; ?>" class="cart-img"></td>
-                        <td><?= $item['nama_barang']; ?></td>
-                        <td>Rp <?= number_format($item['harga_barang'], 0, ',', '.'); ?></td>
-                        <td><?= $item['jumlah']; ?></td>
-                        <td>Rp <?= number_format($item['harga_barang'] * $item['jumlah'], 0, ',', '.'); ?></td>
+                        <td>#<?= $item['id_pesanan']; ?></td>
+                        <td><?= date('d/m/Y H:i', strtotime($item['tanggal_pesanan'])); ?></td>
+                        <td>Rp <?= number_format($item['total_harga'], 0, ',', '.'); ?></td>
                         <td>
-                            <a href="/keranjang/hapus/<?= $item['id_keranjang']; ?>">
-                                <button class="btn-hapus">Hapus</button>
-                            </a>
+                            <span class="status-<?= $item['status']; ?>">
+                                <?= ucfirst($item['status']); ?>
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/pesanan/detail/<?= $item['id_pesanan']; ?>" class="btn-detail">Detail</a>
+                            <?php if ($role === 'admin') : ?>
+                                <form action="/pesanan/update-status/<?= $item['id_pesanan']; ?>" method="post" style="display: inline;">
+                                    <select name="status" onchange="this.form.submit()">
+                                        <option value="pending" <?= $item['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                        <option value="diproses" <?= $item['status'] == 'diproses' ? 'selected' : ''; ?>>Diproses</option>
+                                        <option value="dikirim" <?= $item['status'] == 'dikirim' ? 'selected' : ''; ?>>Dikirim</option>
+                                        <option value="selesai" <?= $item['status'] == 'selesai' ? 'selected' : ''; ?>>Selesai</option>
+                                        <option value="dibatalkan" <?= $item['status'] == 'dibatalkan' ? 'selected' : ''; ?>>Dibatalkan</option>
+                                    </select>
+                                </form>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="text-center">Keranjang masih kosong</td>
+                        <td colspan="5" class="text-center">Belum ada pesanan</td>
                     </tr>
                 <?php endif; ?>
 
@@ -213,13 +291,8 @@
 
         </div>
 
-        <?php if (!empty($keranjang)) : ?>
-            <a href="/pesanan/checkout">
-                <button class="btn-checkout">Checkout</button>
-            </a>
-        <?php endif; ?>
-
     </div>
+
 </div>
 
 <?= $this->endSection(); ?>
