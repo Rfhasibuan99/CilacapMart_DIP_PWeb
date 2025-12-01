@@ -31,12 +31,31 @@ footer a:hover {
 }
 </style>
 
-<div class="container py-4">
-    <h3>Keranjang Belanja</h3>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top main-nav">
+    <div class="container-fluid px-4">
 
-    <?php if (session()->getFlashdata('pesan')): ?>
-        <div class="alert alert-success"><?= session()->getFlashdata('pesan') ?></div>
-    <?php endif; ?>
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="../../../../logo.jpg" alt="Cilacap Mart Logo" class="me-2" width="100px">
+            <span>Cilacap Mart</span>
+        </a>
+
+        <form action="<?= site_url('/rio'); ?>" method="get" class="d-flex">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Masukkan Pencarian Barang" name="cari">
+                <button class="btn btn-outline-secondary" type="submit">Cari</button>
+            </div>
+        </form>
+
+        <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-cart fs-4"></i>
+            <i class="bi bi-person-circle fs-4"></i>
+        </div>
+    </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="main-wrapper">
 
     <?php if (!empty($grouped)): ?>
         <?php foreach ($grouped as $tokoId => $items): ?>
@@ -112,3 +131,4 @@ footer a:hover {
         <div><h6>Pengiriman</h6></div>
     </footer>
 <?= $this->endSection(); ?>
+

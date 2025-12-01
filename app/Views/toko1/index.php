@@ -114,6 +114,7 @@ footer a:hover {
             <!-- CARD DETAIL PRODUK -->
             <div class="col-md-12">
                 <?php foreach ($toko1 as $a): ?>
+
                     <div class="card shadow-sm p-3 mb-4">
 
                         <div class="row g-4">
@@ -182,9 +183,6 @@ footer a:hover {
                         </div>
                     </div>
                 <?php endforeach; ?>
-            </div>
-        </div>
-    </div>
     <footer>
         <div>
             <h6>Layanan Pelanggan</h6>
