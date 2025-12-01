@@ -84,4 +84,4 @@ $routes->post('auth/apple/callback', 'SocialAuth::appleCallback');
 
 $routes->get('admin', 'admin\Dashboard::index'); // Dashboard admin
 $routes->get('admin/barang', 'admin\Dashboard::barang'); // Dashboard admin
-$routes->get('admin/pesanan', 'admin\Dashboard::pesanan'); // Halaman produk di dashboard admin
+$routes->get('admin/pesanan', 'admin\Dashboard::pesanan'); // Halaman produk di dashboard adminaaaa
