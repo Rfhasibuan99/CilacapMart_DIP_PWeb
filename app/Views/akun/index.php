@@ -88,30 +88,6 @@ body {
     background: #E0F2FE;
     transform: translateX(6px);
 }
-footer {
-    background-color: #003366; /* BIRU TUA */
-    padding: 25px 50px;
-    color: #ffffff; /* TEKS PUTIH */
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-footer h6 {
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #ffffff;
-}
-
-footer a {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
 </style>
 
 
@@ -190,16 +166,5 @@ footer a:hover {
     </div>
 
 </div>
-<footer>
-        <div>
-            <h6>Layanan Pelanggan</h6>
-            Bantuan<br>Lacak Pengiriman Penjual<br>Lacak Pesanan Pembeli<br>Hubungi Kami
-        </div>
-        <div>
-            <h6>Jelajahi Cilacap Mart</h6>
-            Tentang Kami<br>Seller Centre<br>Kontak Media
-        </div>
-        <div><h6>Pembayaran</h6></div>
-        <div><h6>Pengiriman</h6></div>
-    </footer>
+
 <?= $this->endSection(); ?>

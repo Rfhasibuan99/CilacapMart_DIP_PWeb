@@ -9,33 +9,23 @@ class PesananModel extends Model
     protected $table = 'pesanan';
     protected $primaryKey = 'id_pesanan';
     protected $allowedFields = [
-        'id_user',
-        'tanggal_pesanan',
-        'total_harga',
-        'status',
-        'alamat_pengiriman'
+        'id_user', 'kode_pesanan', 'alamat_pengiriman',
+        'tanggal_pesan', 'total_harga', 'status'
     ];
-    protected $useTimestamps = true;
 
-    // Relasi dengan detail pesanan
-    public function getPesananWithDetails($idPesanan = false)
+    // Ambil pesanan berdasarkan ID + detail user
+    public function getPesananWithDetails($idPesanan)
     {
-        if ($idPesanan === false) {
-            return $this->findAll();
-        }
-
-        return $this->where(['id_pesanan' => $idPesanan])->first();
+        return $this->select('pesanan.*')
+            ->where('id_pesanan', $idPesanan)
+            ->first();
     }
 
-    // Get pesanan by user
+    // Ambil semua pesanan milik user
     public function getPesananByUser($idUser)
     {
-        return $this->where('id_user', $idUser)->findAll();
-    }
-
-    // Update status pesanan
-    public function updateStatus($idPesanan, $status)
-    {
-        return $this->update($idPesanan, ['status' => $status]);
+        return $this->where('id_user', $idUser)
+            ->orderBy('tanggal_pesan', 'DESC')
+            ->findAll();
     }
 }

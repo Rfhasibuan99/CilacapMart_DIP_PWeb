@@ -5,33 +5,31 @@ namespace App\Controllers;
 use App\Models\PesananModel;
 use App\Models\DetailPesananModel;
 use App\Models\KeranjangModel;
+use App\Models\BarangModel;
 
 class Pesanan extends BaseController
 {
     protected $pesananModel;
     protected $detailPesananModel;
     protected $keranjangModel;
+    protected $barangModel;
 
     public function __construct()
     {
         $this->pesananModel = new PesananModel();
         $this->detailPesananModel = new DetailPesananModel();
         $this->keranjangModel = new KeranjangModel();
+        $this->barangModel = new BarangModel();
     }
-
-    // ======================
-    // INDEX - DAFTAR PESANAN
-    // ======================
     public function index()
     {
         $idUser = session()->get('id');
         $role = session()->get('role') ?? 'user';
 
         if ($role === 'admin') {
-            // Admin melihat semua pesanan
             $pesanan = $this->pesananModel->findAll();
         } else {
-            // User melihat pesanan sendiri
+
             $pesanan = $this->pesananModel->getPesananByUser($idUser);
         }
 
@@ -44,81 +42,98 @@ class Pesanan extends BaseController
         return view('pesanan/index', $data);
     }
 
-    // ======================
-    // DETAIL PESANAN
-    // ======================
+
     public function detail($idPesanan)
-    {
-        $idUser = session()->get('id');
-        $role = session()->get('role') ?? 'user';
+{
+    $idUser = session()->get('id');
+    $role = session()->get('role') ?? 'user';
 
-        $pesanan = $this->pesananModel->getPesananWithDetails($idPesanan);
-        $detail = $this->detailPesananModel->getDetailByPesanan($idPesanan);
+    $pesanan = $this->pesananModel->getPesananWithDetails($idPesanan);
+    $detail  = $this->detailPesananModel->getDetailByPesanan($idPesanan);
 
-        // Cek akses (user hanya bisa lihat pesanan sendiri, admin semua)
-        if ($role !== 'admin' && $pesanan['id_user'] != $idUser) {
-            return redirect()->to('/pesanan')->with('error', 'Akses ditolak');
-        }
-
-        $data = [
-            'title' => 'Detail Pesanan',
-            'pesanan' => $pesanan,
-            'detail' => $detail,
-            'role' => $role
-        ];
-
-        return view('pesanan/detail', $data);
+    if (!$pesanan) {
+        return redirect()->to('/pesanan')->with('error', 'Pesanan tidak ditemukan');
     }
 
-    // ======================
-    // CHECKOUT DARI KERANJANG
-    // ======================
+    if ($role !== 'admin' && $pesanan['id_user'] != $idUser) {
+        return redirect()->to('/pesanan')->with('error', 'Akses ditolak');
+    }
+
+    $data = [
+        'title'   => 'Detail Pesanan',
+        'pesanan' => $pesanan,
+        'detail'  => $detail
+    ];
+
+    return view('pesanan/detail', $data);
+}
+
+
     public function checkout()
-    {
-        $idUser = session()->get('id');
-
-        // Ambil data keranjang
-        $keranjang = $this->keranjangModel
-            ->select('keranjang.*, barang.nama_barang, barang.harga_barang')
-            ->join('barang', 'barang.id_barang = keranjang.id_barang')
-            ->where('keranjang.id_user', $idUser)
-            ->findAll();
-
-        if (empty($keranjang)) {
-            return redirect()->to('/keranjang')->with('error', 'Keranjang kosong');
-        }
-
-        // Hitung total
-        $total = 0;
-        foreach ($keranjang as $item) {
-            $total += $item['harga_barang'] * $item['jumlah'];
-        }
-
-        $data = [
-            'title' => 'Checkout',
-            'keranjang' => $keranjang,
-            'total' => $total
-        ];
-
-        return view('pesanan/checkout', $data);
+{
+    $idUser = session()->get('id');
+    if (!$idUser) {
+        return redirect()->to('/login')->with('error', 'Silakan login terlebih dahulu');
     }
 
-    // ======================
-    // PROSES CHECKOUT
-    // ======================
+    $cart = $this->keranjangModel->getKeranjangByUser($idUser);
+
+    if (!$cart) {
+        return redirect()->to('/keranjang')->with('error', 'Keranjang kosong');
+    }
+
+    // Hitung total harga
+    $totalBelanja = 0;
+    foreach ($cart as $c) {
+        $totalBelanja += $c['harga'] * $c['jumlah'];
+    }
+
+    // Generate kode pesanan
+    $kodePesanan = 'ORD-' . time();
+
+    // Insert data pesanan
+    $dataPesanan = [
+        'id_user' => $idUser,
+        'kode_pesanan' => $kodePesanan,
+        'total_harga' => $totalBelanja,
+        'status' => 'pending'
+    ];
+    $this->pesananModel->insert($dataPesanan);
+
+    $idPesanan = $this->pesananModel->insertID();
+
+    // Insert detail pesanan
+    foreach ($cart as $c) {
+        $this->detailPesananModel->insert([
+            'id_pesanan' => $idPesanan,
+            'id_barang'  => $c['id_barang'],
+            'jumlah'     => $c['jumlah'],
+            'harga'      => $c['harga'],
+            'subtotal'   => $c['jumlah'] * $c['harga']
+        ]);
+    }
+
+    // Kosongkan keranjang user
+    $this->keranjangModel->where('id_user', $idUser)->delete();
+
+    return redirect()->to('/pesanan/' . $idPesanan)
+            ->with('success', 'Pesanan berhasil dibuat');
+}
+
+
     public function prosesCheckout()
     {
         $idUser = session()->get('id');
         $alamat = $this->request->getPost('alamat_pengiriman');
 
-        // Validasi
+
         if (!$this->validate([
             'alamat_pengiriman' => 'required|min_length[10]'
         ])) {
             return redirect()->back()->withInput()->with('validation', $this->validator);
         }
 
-        // Ambil data keranjang
+
         $keranjang = $this->keranjangModel
             ->select('keranjang.*, barang.nama_barang, barang.harga_barang')
             ->join('barang', 'barang.id_barang = keranjang.id_barang')
@@ -129,7 +144,7 @@ class Pesanan extends BaseController
             return redirect()->to('/keranjang')->with('error', 'Keranjang kosong');
         }
 
-        // Hitung total
+
         $total = 0;
         $detailData = [];
         foreach ($keranjang as $item) {
@@ -145,7 +160,7 @@ class Pesanan extends BaseController
             ];
         }
 
-        // Insert pesanan
+
         $idPesanan = $this->pesananModel->insert([
             'id_user' => $idUser,
             'tanggal_pesanan' => date('Y-m-d H:i:s'),
@@ -154,21 +169,94 @@ class Pesanan extends BaseController
             'alamat_pengiriman' => $alamat
         ]);
 
-        // Insert detail pesanan
         foreach ($detailData as &$detail) {
             $detail['id_pesanan'] = $idPesanan;
         }
         $this->detailPesananModel->insertBatch($detailData);
 
-        // Hapus keranjang
+
         $this->keranjangModel->where('id_user', $idUser)->delete();
 
         return redirect()->to('/pesanan')->with('pesan', 'Pesanan berhasil dibuat');
     }
+    public function pesanLangsung($idBarang)
+    {
+        $idUser = session()->get('id');
+        if (!$idUser) {
+            return redirect()->to('/login')->with('error', 'Silahkan login terlebih dahulu');
+        }
 
-    // ======================
-    // UPDATE STATUS PESANAN (ADMIN)
-    // ======================
+        $barang = $this->barangModel->find($idBarang);
+        if (!$barang) {
+            return redirect()->to('/barang')->with('error', 'Barang tidak ditemukan');
+        }
+
+        $data = [
+            'title' => 'Pesan Langsung',
+            'barang' => $barang
+        ];
+
+        return view('pesanan/pesan_langsung', $data);
+    }
+
+    public function prosesPesanLangsung()
+    {
+        $idUser = session()->get('id');
+        if (!$idUser) {
+            return redirect()->to('/login')->with('error', 'Silahkan login terlebih dahulu');
+        }
+
+        $idBarang = $this->request->getPost('id_barang');
+        $jumlah = $this->request->getPost('jumlah');
+        $alamat = $this->request->getPost('alamat_pengiriman');
+
+
+        if (!$this->validate([
+            'id_barang' => 'required|numeric',
+            'jumlah' => 'required|numeric|greater_than[0]',
+            'alamat_pengiriman' => 'required|min_length[10]'
+        ])) {
+            return redirect()->back()->withInput()->with('validation', $this->validator);
+        }
+
+        $barang = $this->barangModel->find($idBarang);
+        if (!$barang) {
+            return redirect()->back()->with('error', 'Barang tidak ditemukan');
+        }
+
+
+        if ($jumlah > $barang['stok']) {
+            return redirect()->back()->withInput()->with('error', 'Stok tidak mencukupi');
+        }
+
+        $harga = $barang['harga_jual'];
+        $total = $harga * $jumlah;
+
+        $idPesanan = $this->pesananModel->insert([
+            'id_user' => $idUser,
+            'tanggal_pesanan' => date('Y-m-d H:i:s'),
+            'total_harga' => $total,
+            'status' => 'pending',
+            'alamat_pengiriman' => $alamat
+        ]);
+
+        $this->detailPesananModel->insert([
+            'id_pesanan' => $idPesanan,
+            'id_barang' => $idBarang,
+            'nama_barang' => $barang['nama_barang'],
+            'harga_barang' => $harga,
+            'jumlah' => $jumlah,
+            'subtotal' => $total
+        ]);
+
+
+        $this->barangModel->update($idBarang, [
+            'stok' => $barang['stok'] - $jumlah
+        ]);
+
+        return redirect()->to('/pesanan')->with('pesan', 'Pesanan berhasil dibuat');
+    }
+
     public function updateStatus($idPesanan)
     {
         $role = session()->get('role') ?? 'user';
