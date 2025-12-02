@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class KeranjangModel extends Model
 {
-    protected $table = 'Keranjang';
+    protected $table = 'keranjang';
     protected $primaryKey = 'id_Keranjang';
-    protected $allowedFields = ['id_toko', 'user_id', 'id_barang', 'jumlah'];
+    protected $allowedFields = ['id_user', 'id_toko', 'id_barang', 'jumlah'];
 }
