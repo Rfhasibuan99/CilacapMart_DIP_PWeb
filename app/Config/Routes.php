@@ -12,7 +12,7 @@ $routes->post('/akun/update', 'Akun::update');
 $routes->get('/notifikasi', 'Notifikasi::index');
 $routes->get('/chat', 'Chat::index');
 
-$routes->get('/keranjang', 'Keranjang::index');
+$routes->get('/keranjang', 'Keranjang::index'); //Untuk masuk ke keranjang
 $routes->get('keranjang/index/(:num)', 'Keranjang::index/$1');
 $routes->post('/keranjang/tambah', 'Keranjang::tambah');
 $routes->get('/keranjang/hapus/(:num)', 'Keranjang::hapus/$1');
