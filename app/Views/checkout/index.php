@@ -1,33 +1,146 @@
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
-<h3>Checkout</h3>
+<style>
+    body {
+        background-color: #f8f9fa; 
+    }
+    .container-checkout {
+        padding-top: 20px;
+    }
+    .back-link {
+        color: #333;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+    .card-alamat {
+        background-color: #003366; /* Biru gelap */
+        color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .item-detail {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+    }
+    .item-detail:last-child {
+        border-bottom: none;
+    }
+    .item-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 4px;
+    }
+    .total-rincian-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+    }
+    .total-final {
+        font-weight: bold;
+        padding-top: 10px;
+        border-top: 1px dashed #ddd;
+    }
+    .btn-checkout-final {
+        background-color: #003366; 
+        color: #fff;
+        font-size: 18px;
+        padding: 12px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 6px;
+    }
+</style>
 
-<table class="table table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>Nama Barang</th>
-            <th>Harga</th>
-            <th>Qty</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($keranjang as $item): ?>
-        <tr>
-            <td><?= $item['nama_barang'] ?></td>
-            <td>Rp <?= number_format($item['harga_jual']) ?></td>
-            <td><?= $item['jumlah'] ?></td>
-            <td>Rp <?= number_format($item['harga_jual'] * $item['jumlah']) ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+<div class="container container-checkout">
+    <a href="<?= base_url('/keranjang') ?>" class="back-link">
+        <i class="fas fa-arrow-left me-2"></i> Kembali ke Keranjang
+    </a>
 
-<h4 class="text-end">Total: Rp <?= number_format($total) ?></h4>
+    <h3 class="fw-bold mt-3">Checkout Pesanan</h3>
 
-<form action="/checkout/proses" method="post">
-    <button class="btn btn-primary w-100">Buat Pesanan</button>
-</form>
+    <div class="row mt-4">
+        <!-- Kolom Kiri: Alamat & Detail Barang -->
+        <div class="col-lg-8">
+
+            <!-- Alamat Pengiriman -->
+            <h5 class="mb-2">Alamat Pengiriman</h5>
+            <div class="card-alamat">
+                <h5><?= $alamat_user['penerima'] ?> (<?= $alamat_user['telp'] ?>)</h5>
+                <p class="mb-0"><?= $alamat_user['alamat_lengkap'] ?></p>
+            </div>
+
+            <!-- Detail Pesanan -->
+            <h5 class="mb-3 mt-4">Detail Pesanan (<?= count($keranjang) ?> Item)</h5>
+            <div class="card p-3 mb-4">
+                <?php foreach($keranjang as $item): ?>
+                <div class="item-detail">
+                    <img src="<?= base_url('img/' . ($item['gambar'] ?? '')) ?>" class="item-img" onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'">
+                    <div class="flex-grow-1">
+                        <div class="fw-bold"><?= $item['nama_barang'] ?></div>
+                        <div class="text-secondary" style="font-size: 14px;">
+                            Rp <?= number_format($item['harga_jual']) ?> x <?= $item['jumlah'] ?>
+                        </div>
+                    </div>
+                    <div class="fw-bold text-end">
+                        Rp <?= number_format($item['subtotal']) ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+
+        </div>
+
+        <!-- Kolom Kanan: Rincian Total & Tombol Proses -->
+        <div class="col-lg-4">
+            <h5 class="mb-3">Rincian Pembayaran</h5>
+            <div class="card p-4">
+                
+                <div class="total-rincian-row">
+                    <div class="text-secondary">Subtotal Produk</div>
+                    <div>Rp <?= number_format($subtotal_produk) ?></div>
+                </div>
+                
+                <div class="total-rincian-row">
+                    <div class="text-secondary">Diskon Voucher</div>
+                    <div class="text-danger">- Rp <?= number_format($diskon) ?></div>
+                </div>
+                
+                <div class="total-rincian-row mb-3">
+                    <div class="text-secondary">Biaya Kirim</div>
+                    <div>Rp <?= number_format($ongkir) ?></div>
+                </div>
+                
+                <div class="total-rincian-row total-final">
+                    <div class="fs-5">Total Bayar</div>
+                    <div class="fs-5 fw-bold text-danger">Rp <?= number_format($total_final) ?></div>
+                </div>
+                
+                <form action="<?= base_url('/checkout/proses') ?>" method="post">
+                    <?= csrf_field(); ?>
+                    <!-- Data yang dikirim ke proses() -->
+                    <input type="hidden" name="alamat_pengiriman" value="<?= $alamat_user['alamat_lengkap'] ?>">
+                    <input type="hidden" name="total_final" value="<?= $total_final ?>">
+                    <input type="hidden" name="sumber_pesanan" value="<?= $sumber_pesanan ?>">
+                    
+                    <!-- Serialisasi data item agar bisa diproses -->
+                    <input type="hidden" name="items_data" value='<?= json_encode($keranjang) ?>'>
+
+                    <button type="submit" class="btn btn-checkout-final w-100 mt-4">
+                        Buat Pesanan (Rp <?= number_format($total_final) ?>)
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <?= $this->endSection() ?>

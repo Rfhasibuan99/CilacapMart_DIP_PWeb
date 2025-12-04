@@ -8,7 +8,8 @@ class BarangModel extends Model
 {
     protected $table = 'barang';
     protected $primaryKey = 'id_barang';
-    protected $allowedFields = ['nama_barang', 'jenis_barang', 'deskripsi', 'gambar', 'stok', 'harga_beli', 'harga_jual'];
+    // FIX: Menggunakan harga_beli dan harga_jual agar konsisten dengan findBarang() dan praktik e-commerce.
+    protected $allowedFields = ['nama_barang', 'jenis_barang', 'deskripsi', 'gambar', 'stok', 'harga_beli', 'harga_jual']; 
 
     // getBarang
     public function getBarang($idbarang = false)

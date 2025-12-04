@@ -110,7 +110,7 @@
                     <span><a href="#">Download</a></span>
                     <span>Ikuti Kami di
                         <a href="https://www.facebook.com/rio.pernandes.90?mibextid=ZbWKwL"><i class="bi bi-facebook ms-1"></i></a>
-                        <a href="https://www.instagram.com/fernans_rh?igsh=eXUxcGsxejd1enln"><i class="bi bi-instagram ms-1"></i></a>
+                        <a href="https://www.instagram.com/annisaaf._/"><i class="bi bi-instagram ms-1"></i></a>
                         <a href="#"><i class="bi bi-twitter-x ms-1"></i></a>
                     </span>
                 </div>
@@ -171,11 +171,13 @@
     <footer>
         <div>
             <h6>Layanan Pelanggan</h6>
-            Bantuan<br>Lacak Pengiriman Penjual<br>Lacak Pesanan Pembeli<br>Hubungi Kami
+            Bantuan<br>Hubungi Kami
         </div>
         <div>
             <h6>Jelajahi Cilacap Mart</h6>
-            Tentang Kami<br>Seller Centre<br>Kontak Media
+            <a href="/layout/about">Tentang Kami</a><br>
+            <a href="https://wa.me/qr/BQX4QH6QIARLH1">Call Center</a><br>
+            <a href="https://www.instagram.com/annisaaf._/">Kontak Media</a>
         </div>
         <div>
             <h6>Pembayaran</h6>

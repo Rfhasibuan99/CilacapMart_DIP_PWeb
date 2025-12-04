@@ -14,4 +14,8 @@ class Page extends BaseController
 
         return view('layout/home', ['barang' => $barang]);
     }
+    public function about()
+    {
+        return view('layout/about');
+    }
 }

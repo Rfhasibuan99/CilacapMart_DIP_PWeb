@@ -6,6 +6,10 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
+
+$routes->get('/layout/about', 'Page::about');
+
+
 $routes->get('/', 'Page::index');
 $routes->get('/akun', 'Akun::index');
 $routes->get('/akun/ubah', 'Akun::ubah');
@@ -24,9 +28,9 @@ $routes->get('/keranjang/tambah_qty/(:num)', 'Keranjang::tambahQty/$1');
 $routes->get('/keranjang/tambah/(:num)', 'Keranjang::tambah/$1');
 $routes->get('/keranjang/kurang/(:num)', 'Keranjang::kurang/$1');
 
-$routes->get('/checkout', 'Checkout::index');
-$routes->post('/checkout/proses', 'Checkout::proses');
-$routes->post('/beli-sekarang', 'Keranjang::beliSekarang');
+// $routes->get('/checkout', 'Checkout::index');
+// $routes->post('/checkout/proses', 'Checkout::proses');
+// $routes->post('/beli-sekarang', 'Keranjang::beliSekarang');
 
 
 
@@ -35,8 +39,14 @@ $routes->get('/pesanan/detail/(:num)', 'Pesanan::detail/$1');
 $routes->get('/pesanan/(:num)', 'Pesanan::detail/$1');
 
 
-$routes->get('/pembayaran/(:num)', 'Pembayaran::index/$1');
-$routes->post('/pembayaran/proses/(:num)', 'Pembayaran::proses/$1');
+$routes->get('checkout', 'Checkout::index');
+$routes->post('checkout/proses', 'Checkout::proses');
+// Untuk Alur Beli Langsung
+$routes->post('checkout/beli-langsung', 'Checkout::beliLangsung'); 
+
+// --- Routes untuk Pembayaran ---
+$routes->get('pembayaran/(:num)', 'Pembayaran::index/$1');
+$routes->post('pembayaran/proses/(:num)', 'Pembayaran::prosesBayar/$1');
 
 $routes->get('/layout/tambah', 'Home::tambah');
 $routes->post('/layout/simpan', 'Home::simpan');
