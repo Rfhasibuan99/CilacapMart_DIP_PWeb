@@ -1,10 +1,18 @@
 <!doctype html>
 <html lang="en">
 <style>
+    /* Definisikan warna Biru Navy */
+    :root {
+        --navy-blue: #003366;
+        --light-blue: #ADD8E6;
+        /* Untuk elemen kontras */
+    }
+
     /* --- HEADER STYLE --- */
 
     .main-nav {
-        background-color: #0096C7;
+        /* WARNA HEADER: Biru Navy */
+        background-color: var(--navy-blue);
     }
 
     .header-row {
@@ -28,19 +36,21 @@
     }
 
     .search-area input {
-        border: 1px solid #90E0EF;
+        /* Border input kontras dengan navy */
+        border: 1px solid var(--light-blue);
     }
 
     .search-btn {
-        background-color: #E0F2FE;
-        color: #0096C7;
-        border: 1px solid #90E0EF;
+        /* TOMBOL CARI: Biru Pucat dengan teks Navy */
+        background-color: var(--light-blue);
+        color: var(--navy-blue);
+        border: 1px solid var(--light-blue);
         font-weight: bold;
     }
 
     .search-btn:hover {
         background-color: white;
-        color: #0096C7;
+        color: var(--navy-blue);
     }
 
     /* ICON GROUP */
@@ -52,14 +62,15 @@
     }
 
     .icon-link:hover {
-        color: #E0F2FE;
+        color: var(--light-blue);
     }
+
+    /* --- FOOTER STYLE --- */
     footer {
-        background-color: #003366;
-        /* BIRU TUA */
+        /* WARNA FOOTER: Biru Navy, sama dengan header */
+        background-color: var(--navy-blue);
         padding: 25px 50px;
         color: #ffffff;
-        /* TEKS PUTIH */
         font-size: 14px;
         display: flex;
         justify-content: space-between;
@@ -86,19 +97,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    </body>
     <link rel="icon" href="../../../../logo.png" type="image/png">
 </head>
 
 <body>
     <header>
 
-        <!-- TOP BAR -->
         <div class="top-bar bg-white py-2 border-bottom d-none d-lg-block">
             <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
                 <div>
-                    <a href="https://wa.me/qr/Q2XTFOSZCJXAJ1">Call Center</a>
-                    <a href="#">Download</a>
+                    <span><a href="https://wa.me/qr/Q2XTFOSZCJXAJ1">Call Center</a></span>
+                    <span><a href="#">Download</a></span>
                     <span>Ikuti Kami di
                         <a href="https://www.facebook.com/rio.pernandes.90?mibextid=ZbWKwL"><i class="bi bi-facebook ms-1"></i></a>
                         <a href="https://www.instagram.com/fernans_rh?igsh=eXUxcGsxejd1enln"><i class="bi bi-instagram ms-1"></i></a>
@@ -107,33 +116,30 @@
                 </div>
 
                 <div class="d-flex align-items-center">
-                    <a href="/notifikasi"><i class="bi bi-bell me-1"></i> Notifikasi</a>
-                    <a href="#"><i class="bi bi-question-circle me-1"></i> Bantuan</a>
-
-                    <div class="dropdown">
-                        <span class="dropdown-toggle text-secondary" data-bs-toggle="dropdown">
-                            Bahasa Indonesia
+                    <ul>
+                        <span><a href="/notifikasi"><i class="bi bi-bell me-1"></i></span><span>Notifikasi</a></span>
+                        <span><a href="#"><i class="bi bi-question-circle me-1"></i></span><span>Bantuan</a></span>
+                        <span id="dropdown-trigger" class="dropdown">
+                        <i class="bi bi-slobe2"></i>Bahasa Indonesia <i class="bi bi-caret-down-fill ms-1"></i>
+                            <ul id="dropdown-menu" class="dropdown-menu" style="display: none;">
+                                <li><a class="dropdown-item" href="#">Bahasa Indonesia</a></li>
+                                <li><a class="dropdown-item" href="#">English</a></li>
+                            </ul>
                         </span>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Bahasa Indonesia</a></li>
-                            <li><a class="dropdown-item" href="#">English</a></li>
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
             </div>
         </div>
+        </div>
 
-        <!-- MAIN NAV (LOGO - SEARCH - ICONS) -->
         <div class="main-nav container-fluid px-4 py-2">
             <div class="header-row">
 
-                <!-- LOGO -->
                 <a class="navbar-brand d-flex align-items-center" href="/">
                     <img src="../../../../logo.png" width="90" class="me-2">
                     <span class="logo-text">Cilacap Mart</span>
                 </a>
 
-                <!-- SEARCH -->
                 <form action="<?= site_url('/'); ?>" method="get" class="search-area">
                     <div class="input-group">
                         <input type="text" class="form-control" name="cari" placeholder="Masukkan Pencarian Barang">
@@ -141,17 +147,16 @@
                     </div>
                 </form>
 
-                <!-- ICONS -->
                 <div class="icon-group d-flex align-items-center">
                     <a href="<?= base_url('pesanan'); ?>" class="icon-link">
-                        <i class="bi bi-bag"></i> Pesanan
+                        <i class="bi bi-bag"></i>
                     </a>
 
                     <a href="<?= base_url('keranjang'); ?>" class="icon-link">
-                        <i class="bi bi-cart"></i> Keranjang
+                        <i class="bi bi-cart"></i>
                     </a>
 
-                    <a href="/akun" class="icon-link"><i class="bi bi-person-circle"></i>Akun</a>
+                    <a href="/akun" class="icon-link"><i class="bi bi-person-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -162,23 +167,53 @@
     <div class="container mt-4">
         <?= $this->renderSection('content') ?>
     </div>
-    
-    <footer>
-    <div>
-        <h6>Layanan Pelanggan</h6>
-        Bantuan<br>Lacak Pengiriman Penjual<br>Lacak Pesanan Pembeli<br>Hubungi Kami
-    </div>
-    <div>
-        <h6>Jelajahi Cilacap Mart</h6>
-        Tentang Kami<br>Seller Centre<br>Kontak Media
-    </div>
-    <div>
-        <h6>Pembayaran</h6>
-    </div>
-    <div>
-        <h6>Pengiriman</h6>
-    </div>
-</footer>
-</body>
 
+    <footer>
+        <div>
+            <h6>Layanan Pelanggan</h6>
+            Bantuan<br>Lacak Pengiriman Penjual<br>Lacak Pesanan Pembeli<br>Hubungi Kami
+        </div>
+        <div>
+            <h6>Jelajahi Cilacap Mart</h6>
+            Tentang Kami<br>Seller Centre<br>Kontak Media
+        </div>
+        <div>
+            <h6>Pembayaran</h6>
+            <img src="img/bni.png" alt="Logo Bank BNI" class="img-fluid bni-logo" width="80"><br>
+            <img src="img/bri.png" alt="Logo BRI" class="img-fluid bri-logo" width="80"><br>
+            <img src="img/bca.jpg" alt="Logo bca" class="img-fluid bca-logo" width="80">
+        </div>
+        <div>
+            <h6>Pengiriman</h6>
+            <img src="img/jne.jpg" alt="Logo JNE" class="img-fluid jne-logo" width="80"><br>
+            <img src="img/grab.jpg" alt="Logo Grab" class="img-fluid grab-logo" width="80"><br>
+            <img src="img/gojek.jpg" alt="Logo Gojek" class="img-fluid gojek-logo" width="80">
+        </div>
+    </footer>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const trigger = document.getElementById('dropdown-trigger');
+    const menu = document.getElementById('dropdown-menu');
+
+    trigger.addEventListener('click', function(event) {
+        // Mencegah navigasi atau aksi default
+        event.preventDefault(); 
+        
+        // Mengubah status display (tampilkan/sembunyikan)
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'block'; // Tampilkan menu
+        } else {
+            menu.style.display = 'none'; // Sembunyikan menu
+        }
+    });
+
+    // Opsional: Sembunyikan menu ketika mengklik di luar
+    document.addEventListener('click', function(event) {
+        if (!trigger.contains(event.target) && !menu.contains(event.target)) {
+            menu.style.display = 'none';
+        }
+    });
+});
+</script>
 </html>

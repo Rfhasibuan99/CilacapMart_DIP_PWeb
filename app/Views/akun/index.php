@@ -6,16 +6,16 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #E0F2FE;
+    background: #E8EFF7;
 }
 
 /* ====== NAVBAR ======= */
 .main-nav {
-    background-color: #0096C7 !important;
+    background-color: #003366 !important;
 }
 
 .input-group .btn {
-    background-color: #0096C7;
+    background-color: #003366;
     color: white;
 }
 

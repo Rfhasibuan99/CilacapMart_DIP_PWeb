@@ -1,5 +1,10 @@
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
+<style>
+    body {
+        background-color: #E8EFF7; /* biru muda sesuai desain */
+    }
+</style>
 <h3>Keranjang Belanja</h3>
 
 <table class="table">
