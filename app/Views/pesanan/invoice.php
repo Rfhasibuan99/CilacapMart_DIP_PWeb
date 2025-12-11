@@ -120,10 +120,10 @@
         <div class="success-header">
             <i class="fas fa-check-circle success-icon"></i>
             <h1 class="invoice-title">PESANAN BERHASIL DIBUAT</h1>
-            <p class="text-secondary">Pesanan **<?= $pesanan['kode_pesanan'] ?? 'INV/...' ?>** telah dibuat. Silahkan selesaikan pembayaran.</p>
+            <p class="text-secondary">Pesanan <?= $pesanan['kode_pesanan'] ?? 'INV/...' ?> telah dibuat. Silahkan selesaikan pembayaran.</p>
         </div>
 
-        
+
         <hr>
 
         <div class="detail-section">
@@ -157,7 +157,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <h6 class="mt-4">Detail Item Pesanan</h6>
             <div class="detail-item-list">
                 <?php $totalItems = 0; ?>
@@ -182,7 +182,7 @@
 
         <div class="total-section">
             <h6 style="color: #003366; border-bottom: none; margin-bottom: 10px;">Ringkasan Pembayaran</h6>
-            
+
             <div class="detail-row">
                 <div>Subtotal Produk (<?= $totalItems ?> Item)</div>
                 <div>Rp <?= number_format($pesanan['subtotal'] ?? 0) ?></div>
@@ -199,18 +199,19 @@
                 <div>PPN (11%)</div>
                 <div>+ Rp <?= number_format(($pesanan['total_harga'] ?? 0) - (($pesanan['subtotal'] ?? 0) - ($pesanan['diskon'] ?? 0) + ($pesanan['ongkir'] ?? 0))) ?></div>
             </div>
-            
-            
+
+
             <hr class="my-2">
-            
+
             <div class="total-row">
                 <div>Total Pembayaran</div>
                 <div class="total-final-amount">Rp <?= number_format($pesanan['total_harga'] ?? 0) ?></div>
             </div>
         </div>
-        
+
         <div class="btn-action-group">
-            <a href="<?= base_url('pembayaran/' . ($pesanan['id_pesanan'] ?? 0)) ?>" class="btn-finish" style="background-color: #28a745;">
+
+            <a href="<?= base_url('pesanan/bayar/' . ($pesanan['id_pesanan'] ?? 0)) ?>" class="btn-finish" style="background-color: #28a745;">
                 <i class="fas fa-money-bill-wave me-2"></i> Lanjut Ke Pembayaran
             </a>
 

@@ -252,6 +252,44 @@ class Pesanan extends Controller
         return view('pesanan/invoice', $data); 
     }
     
+    public function bayar($id_pesanan)
+    {
+        $pesanan = $this->pesananModel->find($id_pesanan);
+
+        if (!$pesanan || $pesanan['id_user'] != $this->user_id) {
+            throw PageNotFoundException::forPageNotFound('Pesanan tidak ditemukan atau bukan milik Anda.');
+        }
+
+        $data = [
+            'title' => 'Pembayaran Pesanan #' . $pesanan['kode_pesanan'],
+            'pesanan' => [
+                'id_pesanan' => $pesanan['id_pesanan'],
+                'kode_pesanan' => $pesanan['kode_pesanan'],
+                'total_harga' => $pesanan['total_harga'],
+                'status' => $pesanan['status'],
+            ],
+        ];
+
+        return view('pesanan/pembayaran', $data);
+    }
+    
+    public function update_status_pembayaran()
+    {
+        $id_pesanan = $this->request->getPost('id_pesanan');
+        
+        $pesanan = $this->pesananModel->find($id_pesanan);
+
+        if (!$pesanan || $pesanan['id_user'] != $this->user_id) {
+            return redirect()->to(base_url('pesanan'))->with('error', 'Pesanan tidak valid.');
+        }
+
+        $this->pesananModel->update($id_pesanan, [
+            'status' => 'Menunggu Verifikasi', 
+        ]);
+        
+        return redirect()->to(base_url('pesanan/invoice/' . $id_pesanan))->with('success', 'Konfirmasi pembayaran berhasil dikirim. Status pesanan Anda kini "Menunggu Verifikasi".');
+    }
+    
     public function hapus($id_pesanan)
     {
         $pesanan = $this->pesananModel->find($id_pesanan);

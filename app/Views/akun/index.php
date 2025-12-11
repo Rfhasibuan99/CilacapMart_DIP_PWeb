@@ -189,8 +189,8 @@
         <div class="menu">
             <div class="menu-item"><a href="/akun"><i class="bi bi-person"></i> Akun Saya</a></div>
             <div class="menu-item"><a href="/pesanan"><i class="bi bi-bag"></i> Pesanan Saya</a></div>
-            <div class="menu-item"><a href="/notifikasi"><i class="bi bi-bell"></i> Notifikasi</a></div>
-            <div class="menu-item"><a href="/"><i class="bi bi-coin" style="color:#f5c400;"></i> Point Saya</a></div>
+            <div class="menu-item"><a href="/chat"><i class="bi bi-bell"></i> Notifikasi</a></div>
+            <div class="menu-item"><a href="/keranjang"><i class="bi bi-cart" style="color:#f5c400;"></i> Keranjang Saya</a></div>
             <div class="menu-item">
                 <a href="/logout">
                     <i class="bi bi-box-arrow-right" style="color:red;"></i> Logout

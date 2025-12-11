@@ -1,7 +1,10 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\SaranModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class Saran extends BaseController
 {
@@ -9,94 +12,138 @@ class Saran extends BaseController
 
     public function __construct()
     {
+        // Pastikan Anda memiliki helper 'form' dan helper untuk otentikasi (misalnya 'auth' atau 'user')
+        helper(['form', 'url', 'auth']);
         $this->saranModel = new SaranModel();
-        // Memuat helper yang diperlukan untuk form dan otentikasi (Myth/Auth)
-        helper(['form', 'url', 'auth']); 
     }
 
-    // A. Tampilan Form Saran (Halaman Public)
     public function index()
     {
         $data = [
             'title' => 'Form Saran & Masukan',
             'validation' => \Config\Services::validation(),
-            'kategori_list' => $this->getKategoriOpsi()
+            'kategori_list' => $this->getKategoriOpsiForForm(), // Menggunakan opsi form yang lebih lengkap
         ];
+        // Pastikan view file ini ada di app/Views/saran/tambah.php
         return view('saran/index', $data);
     }
 
-    // B. Menyimpan Saran dari Pengguna
     public function simpan()
     {
-        // 1. Validasi Input
+        // 1. Definisikan Rule Validasi
         $rules = [
             'kategori' => 'required',
             'judul_saran' => 'required|max_length[255]',
             'deskripsi' => 'required|max_length[5000]',
         ];
 
+        // 2. Lakukan Validasi
         if (!$this->validate($rules)) {
-            return redirect()->back()->withInput();
+            // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan input dan error
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // 2. Tentukan Pengirim (Menggunakan kolom users_id sesuai tabel)
+        // 3. Tentukan Detail Pengguna
         $usersId = null;
         $username = 'Anonim';
-        
-        // Cek jika user login dan tidak mencentang anonim
-        if (logged_in() && !$this->request->getPost('anonim')) {
-            $usersId = user_id();
-            $username = user()->username;
+
+        // Cek apakah pengguna login dan tidak mencentang kotak 'anonim'
+        if (logged_in() && $this->request->getPost('anonim') !== '1') {
+            $user = user(); // Ambil objek pengguna saat ini
+            $usersId = $user->id ?? null;
+            $username = $user->username ?? 'Tamu Terdaftar';
         }
 
-        // 3. Simpan ke Database
-        $this->saranModel->save([
+        // 4. Simpan Data
+        $dataSimpan = [
             'users_id' => $usersId,
             'username' => $username,
             'kategori' => $this->request->getPost('kategori'),
             'judul_saran' => $this->request->getPost('judul_saran'),
             'deskripsi' => $this->request->getPost('deskripsi'),
-        ]);
+            'status' => 'Baru',
+        ];
 
-        session()->setFlashdata('pesan', 'Terima kasih! Saran/Masukan Anda berhasil dikirim.');
+        $this->saranModel->save($dataSimpan);
 
-        return redirect()->to(base_url('saran'));
-    }
-    
-    // C. Daftar Saran (Hanya Admin)
-    // app/Controllers/Saran.php (Metode daftar)
+        // 5. Berikan Pesan Sukses dan Redirect
+        session()->setFlashdata('pesan', 'Terima kasih! Saran Anda telah berhasil kami terima dan akan segera kami tinjau.');
 
-public function daftar()
-{
-    // Filter akses tetap berlaku
-    if (!in_groups('admin')) { 
-        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        return redirect()->to(base_url('saran')); // Redirect ke halaman form saran
     }
 
-    $kategoriFilter = $this->request->getVar('kategori');
-    $statusFilter = $this->request->getVar('status');
+    public function daftar()
+    {
+        // Cek otorisasi, hanya untuk admin
+        if (!in_groups('admin')) {
+            throw PageNotFoundException::forPageNotFound();
+        }
 
-    $builder = $this->saranModel;
-    if ($kategoriFilter) {
-        $builder = $builder->where('kategori', $kategoriFilter);
+        // Ambil filter dari query string
+        $kategoriFilter = $this->request->getVar('kategori');
+        $statusFilter = $this->request->getVar('status');
+
+        $builder = $this->saranModel;
+
+        // Terapkan filter jika ada
+        if ($kategoriFilter) {
+            $builder = $builder->where('kategori', $kategoriFilter);
+        }
+        if ($statusFilter) {
+            $builder = $builder->where('status', $statusFilter);
+        }
+
+        $data = [
+            'title' => 'Daftar Saran & Masukan',
+            // Ambil semua data dengan filter, urutkan berdasarkan created_at terbaru
+            'saran_list' => $builder->orderBy('created_at', 'DESC')->findAll(),
+            'kategori_aktif' => $kategoriFilter,
+            'status_aktif' => $statusFilter,
+            'kategori_opsi' => $this->getKategoriOpsiForForm() // Opsi untuk filter/form
+        ];
+
+        return view('saran/daftar', $data);
     }
-    
-    $data = [
-        'title' => 'Daftar Saran & Masukan',
-        'saran_list' => $builder->orderBy('created_at', 'DESC')->findAll(),
-        'kategori_aktif' => $kategoriFilter,
-        'status_aktif' => $statusFilter,
-        'kategori_opsi' => $this->getKategoriOpsi()
-    ];
 
-    // PENTING: Mengarahkan ke file saran/detail.php yang kini berisi daftar
-    return view('saran/detail', $data); 
-}
-    
-    // D. Detail Saran (Hanya Admin)
     public function detail($id = null)
     {
+        // Cek otorisasi, hanya untuk admin
         if (!in_groups('admin')) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        // Cari data saran
+        $saran = $this->saranModel->find($id);
+
+        if (!$saran) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
+        // Update status menjadi 'Dibaca' jika status sebelumnya 'Baru'
+        if ($saran['status'] === 'Baru') {
+            $this->saranModel->update($id, ['status' => 'Dibaca']);
+            $saran['status'] = 'Dibaca'; // Update array untuk tampilan tanpa perlu reload
+        }
+
+        return view('saran/admin_detail', ['title' => 'Detail Saran', 'saran' => $saran]);
+    }
+
+    // Metode untuk menyediakan opsi kategori yang digunakan di form/filter
+    private function getKategoriOpsiForForm()
+    {
+        return [
+            'Peningkatan Fitur',
+            'Masalah Teknis',
+            'Kritik Layanan',
+            'Belanja',
+            'Pembayaran',
+            'Pengiriman',
+            'Lain-lain'
+        ];
+    }
+    public function update_status($id = null)
+    {
+        if (!in_groups('admin') || !$this->request->is('post')) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
@@ -106,38 +153,17 @@ public function daftar()
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        if ($saran['status'] === 'Baru') {
-            $this->saranModel->update($id, ['status' => 'Dibaca']);
-            $saran['status'] = 'Dibaca'; 
+        $newStatus = $this->request->getPost('status');
+
+        if (!in_array($newStatus, ['Dibaca', 'Diproses', 'Selesai'])) {
+            session()->setFlashdata('error', 'Status yang dimasukkan tidak valid.');
+            return redirect()->back();
         }
 
-        return view('saran/admin_detail', ['title' => 'Detail Saran', 'saran' => $saran]);
-    }
-public function detail_satu($id = null)
-{
-    if (!in_groups('admin')) { 
-        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-    }
+        $this->saranModel->update($id, ['status' => $newStatus]);
 
-    $saran = $this->saranModel->find($id);
+        session()->setFlashdata('pesan_update', "Status saran #{$id} berhasil diubah menjadi '{$newStatus}'.");
 
-    if (!$saran) {
-        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-    }
-
-    if ($saran['status'] === 'Baru') {
-        $this->saranModel->update($id, ['status' => 'Dibaca']);
-        $saran['status'] = 'Dibaca'; 
-    }
-
-    return view('saran/detail_satu', ['title' => 'Detail Saran Tunggal', 'saran' => $saran]);
-}
-
-    private function getKategoriOpsi()
-    {
-         return [
-            'Minuman', 'Makanan', 'Fashion', 'Barang Kerajinan', 'Accessoris', 
-            'Bahan Baku', 'Peningkatan Fitur', 'Masalah Teknis', 'Kritik Layanan', 'Lain-lain'
-        ];
+        return redirect()->to(base_url('saran/detail/' . $id));
     }
 }

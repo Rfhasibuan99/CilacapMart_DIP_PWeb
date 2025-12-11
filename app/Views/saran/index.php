@@ -1,6 +1,19 @@
 <?= $this->extend('layout/template'); ?>
 <?= $this->section('content'); ?>
 
+<?php
+// Tentukan array gambar/ikon yang lebih umum untuk kategori
+$gambarKategoriMapping = [
+    'Peningkatan Fitur' => 'fa-lightbulb',
+    'Masalah Teknis' => 'fa-bug',
+    'Kritik Layanan' => 'fa-comment-alt-slash',
+    'Belanja' => 'fa-shopping-cart',
+    'Pembayaran' => 'fa-credit-card',
+    'Pengiriman' => 'fa-truck',
+    'Lain-lain' => 'fa-ellipsis-h',
+];
+?>
+
 <style>
     body {
         background-color: #f5f5f5;
@@ -53,12 +66,13 @@
         cursor: pointer;
         display: block;
         text-decoration: none;
+        outline: none; /* Hilangkan outline fokus default */
     }
 
     .category-btn:hover {
         border-color: #007bff;
-        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
-        transform: translateY(-3px);
+        box-shadow: 0 2px 5px rgba(0, 123, 255, 0.1);
+        transform: translateY(-1px);
     }
     
     .category-btn.selected {
@@ -69,15 +83,16 @@
         box-shadow: 0 0 5px rgba(0, 51, 102, 0.2);
     }
     
-    /* Styling Gambar Kategori */
-    .category-image {
-        width: 50px;
-        height: 50px;
-        object-fit: contain;
+    /* Styling Icon Kategori */
+    .category-icon {
+        font-size: 2rem;
+        color: #007bff;
         margin-bottom: 5px;
         display: block;
-        margin-left: auto;
-        margin-right: auto;
+    }
+
+    .category-btn.selected .category-icon {
+        color: #003366;
     }
     
     .form-control, .form-select {
@@ -117,7 +132,7 @@
 
 <div class="form-page-header">
     <div class="container">
-        <h2 class="form-title-main">Sampaikan Saran & Masukan Anda</h2>
+        <h2 class="form-title-main"><?= $title; ?></h2>
     </div>
 </div>
 
@@ -141,44 +156,29 @@
                 
                 <div class="category-grid">
                     <?php
-                    $kategoriOpsi = isset($kategori_list) ? $kategori_list : [
-                        'Minuman', 'Makanan', 'Fashion', 'Barang Kerajinan', 'Accessories', 'Bahan Baku', 'Belanja', 'Pembayaran', 'Pengiriman', 'Fitur Aplikasi', 'Lainnya'
-                    ];
-                    
-                    $gambarKategori = [
-                        'Minuman' => 'Minuman.jpg',
-                        'Makanan' => 'Makanan.jpg',
-                        'Fashion' => 'Fashion.jpg',
-                        'Barang Kerajinan' => 'BarangKerajinan.jpg',
-                        'Accessories' => 'Accesories.jpg',
-                        'Bahan Baku' => 'BahanBaku.jpg',
-                        'Belanja' => 'fa-shopping-cart',
-                        'Pembayaran' => 'fa-credit-card',
-                        'Pengiriman' => 'fa-truck',
-                        'Fitur Aplikasi' => 'fa-mobile-alt',
-                        'Lainnya' => 'fa-ellipsis-h',
-                    ];
+                    // Gunakan $kategori_list yang dilewatkan dari controller
+                    $kategoriOpsi = $kategori_list ?? $this->getKategoriOpsiForForm();
                     
                     foreach ($kategoriOpsi as $opsi): 
                         if (empty($opsi)) continue;
-                        $fileName = $gambarKategori[$opsi] ?? 'default.jpg';
+                        
+                        // Cek apakah kategori ini memiliki ikon/gambar yang telah didefinisikan
+                        $iconClass = $gambarKategoriMapping[$opsi] ?? 'fa-question-circle'; // Default icon jika tidak ada
                         $isSelected = (old('kategori') == $opsi) ? 'selected' : '';
                     ?>
                         <button type="button" 
                                 class="category-btn <?= $isSelected; ?>" 
-                                data-kategori="<?= $opsi; ?>"
+                                data-kategori="<?= esc($opsi); ?>"
                                 onclick="selectCategory(this)">
-                            <img src="<?= base_url('img/' . $fileName); ?>" 
-                                 class="category-image" 
-                                 alt="<?= $opsi; ?>">
-                            <?= $opsi; ?>
+                            <i class="fas category-icon <?= esc($iconClass); ?>"></i>
+                            <?= esc($opsi); ?>
                         </button>
                     <?php endforeach; ?>
                 </div>
 
-                <?php if (validation_show_error('kategori')): ?>
+                <?php if (session('errors.kategori')): ?>
                     <div class="text-danger small mt-2">
-                        <?= validation_show_error('kategori'); ?>
+                        <?= session('errors.kategori'); ?>
                     </div>
                 <?php endif; ?>
                 
@@ -186,29 +186,33 @@
 
             <div class="mb-3">
                 <label for="judul_saran" class="form-label">Judul Singkat <span class="text-danger">*</span></label>
-                <input type="text" class="form-control <?= (validation_show_error('judul_saran')) ? 'is-invalid' : ''; ?>"
-                    id="judul_saran" name="judul_saran" value="<?= old('judul_saran'); ?>" placeholder="Contoh: Perlu Fitur Filter Barang">
+                <input type="text" 
+                    class="form-control <?= (session('errors.judul_saran')) ? 'is-invalid' : ''; ?>"
+                    id="judul_saran" name="judul_saran" value="<?= old('judul_saran'); ?>" 
+                    placeholder="Contoh: Perlu Fitur Filter Barang">
                 <div class="invalid-feedback">
-                    <?= validation_show_error('judul_saran'); ?>
+                    <?= session('errors.judul_saran'); ?>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi Lengkap <span class="text-danger">*</span></label>
-                <textarea class="form-control <?= (validation_show_error('deskripsi')) ? 'is-invalid' : ''; ?>"
-                    id="deskripsi" name="deskripsi" rows="5" placeholder="Jelaskan saran Anda secara detail..."><?= old('deskripsi'); ?></textarea>
+                <textarea class="form-control <?= (session('errors.deskripsi')) ? 'is-invalid' : ''; ?>"
+                    id="deskripsi" name="deskripsi" rows="5" 
+                    placeholder="Jelaskan saran Anda secara detail..."><?= old('deskripsi'); ?></textarea>
                 <div class="invalid-feedback">
-                    <?= validation_show_error('deskripsi'); ?>
+                    <?= session('errors.deskripsi'); ?>
                 </div>
             </div>
 
             <div class="mb-4 form-check">
                 <?php if (!logged_in()): ?>
-                    <input type="checkbox" class="form-check-input" id="anonim" name="anonim" value="1" <?= (old('anonim')) ? 'checked' : ''; ?>>
+                    <input type="checkbox" class="form-check-input" id="anonim" name="anonim" value="1" <?= (old('anonim') == '1') ? 'checked' : ''; ?>>
                     <label class="form-check-label" for="anonim">Kirim secara anonim (Nama tidak akan dicatat).</label>
                 <?php else: ?>
-                    <p class="text-muted small">Anda mengirim sebagai: <strong><?= user()->username; ?></strong></p>
-                    <input type="hidden" name="id_pengguna" value="<?= user_id(); ?>">
+                    <input type="checkbox" class="form-check-input" id="anonim" name="anonim" value="1" <?= (old('anonim') == '1') ? 'checked' : ''; ?>>
+                    <label class="form-check-label" for="anonim">Kirim secara anonim (Nama dan ID Anda tidak akan dicatat).</label>
+                    <p class="text-muted small mt-2">Jika tidak dicentang, Anda mengirim sebagai: <strong><?= user()->username ?? 'Pengguna'; ?></strong></p>
                 <?php endif; ?>
             </div>
 
@@ -238,9 +242,17 @@
 
             selectedButton.classList.add('selected');
 
+            // Set nilai ke hidden input
             hiddenInput.value = selectedButton.dataset.kategori;
+
+            // Clear validation error message on selection
+            const categoryError = document.querySelector('.text-danger.small.mt-2');
+            if (categoryError) {
+                categoryError.style.display = 'none';
+            }
         };
 
+        // Re-select category if 'old' value exists on page load
         if (hiddenInput.value) {
             categoryButtons.forEach(btn => {
                 if (btn.dataset.kategori === hiddenInput.value) {
@@ -249,6 +261,19 @@
             });
         }
     });
+    
+    // Helper function used by the controller, included here for completeness
+    function getKategoriOpsiForForm() {
+        return [
+            'Peningkatan Fitur', 
+            'Masalah Teknis', 
+            'Kritik Layanan', 
+            'Belanja', 
+            'Pembayaran', 
+            'Pengiriman', 
+            'Lain-lain'
+        ];
+    }
 </script>
 
 <?= $this->endSection(); ?>

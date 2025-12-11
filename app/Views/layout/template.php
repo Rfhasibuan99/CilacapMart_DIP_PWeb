@@ -15,6 +15,7 @@
             --navy-blue: #003366;
             --light-blue: #ADD8E6;
         }
+
         html,
         body {
             height: 100%;
@@ -29,24 +30,24 @@
         .main-content-wrapper {
             flex: 1;
         }
-        
+
         .top-bar .container-fluid {
-            align-items: center; 
+            align-items: center;
         }
 
-        .top-bar .left-links > span {
+        .top-bar .left-links>span {
             margin-right: 15px;
         }
-        
+
         .top-bar .right-links {
             display: flex;
-            align-items: center; 
+            align-items: center;
         }
 
-        .top-bar .right-links > span {
+        .top-bar .right-links>span {
             margin-left: 15px;
         }
-        
+
         .main-nav {
             background-color: var(--navy-blue);
         }
@@ -62,35 +63,27 @@
             font-size: 24px;
             font-weight: bold;
             color: white;
-            white-space: nowrap; 
+            white-space: nowrap;
         }
 
-        .search-area {
-            flex: 1;
-            max-width: 650px;
+        .custom-search-input {
+            height: 40px;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            border: 1px solid #ced4da;
         }
 
-        .search-area input {
-            border: 1px solid var(--light-blue);
-        }
-
-        .search-btn {
-            background-color: var(--light-blue);
-            color: var(--navy-blue);
-            border: 1px solid var(--light-blue);
-            font-weight: bold;
-            transition: 0.2s ease;
-        }
-
-        .search-btn:hover {
-            background-color: white;
-            color: var(--navy-blue);
+        .btn-primary {
+            height: 40px;
+            white-space: nowrap;
         }
 
         .icon-group {
             display: flex;
-            align-items: center; 
-            min-width: 150px; 
+            align-items: center;
+            min-width: 150px;
             justify-content: flex-end;
         }
 
@@ -194,11 +187,9 @@
                         <span class="logo-text">Cilacap Mart</span>
                     </a>
 
-                    <form action="<?= site_url('/'); ?>" method="get" class="search-area">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="cari" placeholder="Masukkan Pencarian Barang">
-                            <button class="btn search-btn" type="submit">Cari</button>
-                        </div>
+                    <form action="/barang" method="GET" class="d-flex flex-grow-1 mx-5" role="search">
+                        <input class="form-control me-2 custom-search-input" type="search" name="cari" placeholder="Cari barang, kategori, atau toko..." value="<?= old('cari') ?>">
+                        <button class="btn btn-primary" type="submit">Cari</button>
                     </form>
 
                     <div class="icon-group d-flex align-items-center">

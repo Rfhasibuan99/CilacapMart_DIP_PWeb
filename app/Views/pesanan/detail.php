@@ -157,7 +157,7 @@
 
         <?php if ($pesanan['status'] == 'Menunggu Pembayaran'): ?>
             <div class="text-center mt-3">
-                <a href="<?= base_url('pembayaran/' . $pesanan['id_pesanan']) ?>" class="btn btn-success">
+                <a href="<?= base_url('pesanan/bayar/' . $pesanan['id_pesanan']) ?>" class="btn btn-success">
                     <i class="fas fa-upload me-2"></i>Upload Bukti Pembayaran
                 </a>
             </div>

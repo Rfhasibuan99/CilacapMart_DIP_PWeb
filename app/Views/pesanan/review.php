@@ -187,14 +187,14 @@
 
                 <h5 class="fw-bold mt-4">Metode Pengiriman</h5>
                 <div class="metode-pengiriman">
-                    <div class="metode-item" data-value="Grob Standard" data-cost="20000">
+                    <div class="metode-item" data-value="Grab Standard" data-cost="20000">
                         <div class="d-flex align-items-center">
                             <img src="https://placehold.co/30x30/00A94F/FFFFFF?text=Grab" class="me-3">
                             <span class="fw-bold">Grab Standard (Rp 20.000)</span>
                         </div>
                         <i class="fas fa-check-circle text-primary d-none icon-check"></i>
                     </div>
-                    <div class="metode-item" data-value="Express Cepat" data-cost="15000">
+                    <div class="metode-item" data-value="Gojek Express" data-cost="15000">
                         <div class="d-flex align-items-center">
                             <img src="https://placehold.co/30x30/00AA13/FFFFFF?text=Gojek" class="me-3">
                             <span class="fw-bold">Gojek Express (Rp 15.000)</span>

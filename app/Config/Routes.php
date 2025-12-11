@@ -86,7 +86,9 @@ $routes->group('chat', function ($routes) {
 $routes->get('/saran', 'Saran::index');
 $routes->post('/saran/simpan', 'Saran::simpan');
 $routes->get('saran/daftar', 'Saran::daftar');
-$routes->get('saran/detail_satu/(:num)', 'Saran::detail_satu/$1');
+$routes->get('saran/detail/(:num)', 'Saran::detail/$1');
+
+$routes->post('saran/update_status/(:num)', 'Saran::update_status/$1');
 
 $routes->group('admin', ['filter' => 'login'], function ($routes) {
     $routes->get('chat', 'Chat::index');
@@ -106,3 +108,5 @@ $routes->get('pesanan/ubah/(:num)', 'Pesanan::ubah/$1');
 $routes->post('pesanan/update/(:num)', 'Pesanan::update/$1');
 $routes->get('pesanan/hapus/(:num)', 'Pesanan::hapus/$1');
 $routes->get('pesanan/lacak-pesanan/(:num)', 'Pesanan::lacakPesanan/$1');
+$routes->get('pesanan/bayar/(:num)', 'Pesanan::bayar/$1');
+$routes->post('pesanan/update_status', 'Pesanan::update_status_pembayaran');

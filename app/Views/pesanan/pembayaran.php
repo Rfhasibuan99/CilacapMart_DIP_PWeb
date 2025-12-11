@@ -1,6 +1,8 @@
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <style>
     body {
         background-color: #f0f8ff; 
@@ -93,7 +95,6 @@
             $kodePesanan = $pesanan['kode_pesanan'] ?? '20250101';
             $totalFinal = $pesanan['total_harga'] ?? 0; 
             
-  
             $qrData = "PembayaranQRIS-INV-" . $kodePesanan . "-Total-" . $totalFinal;
         ?>
 
@@ -113,14 +114,14 @@
                 <li>Buka aplikasi pembayaran (Mobile Banking / E-Wallet) yang mendukung QRIS.</li>
                 <li>Pilih menu *Scan* atau Pindai QR Code.</li>
                 <li>Arahkan kamera ke QR Code di atas.</li>
-                <li>Pastikan jumlah pembayaran yang muncul adalah **Rp <?= number_format($totalFinal, 0, ',', '.') ?>**.</li>
+                <li>Pastikan jumlah pembayaran yang muncul adalah Rp <?= number_format($totalFinal, 0, ',', '.') ?>.</li>
                 <li>Konfirmasi pembayaran.</li>
             </ol>
         </div>
 
         <hr>
 
-        <form action="<?= base_url('pembayaran/update_status') ?>" method="post">
+        <form action="<?= base_url('pesanan/update_status') ?>" method="post">
             
             <?= csrf_field() ?>
 
