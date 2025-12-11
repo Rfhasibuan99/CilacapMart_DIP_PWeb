@@ -7,32 +7,26 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-// --- Kelompok Routes Pesanan (Diatur Agar Lebih Terstruktur) ---
+
 $routes->group('pesanan', function ($routes) {
-    // Riwayat Pesanan
     $routes->get('/', 'Pesanan::index');
 
-    // Checkout Process
-    $routes->post('prepare_review', 'Pesanan::prepare_review'); // Dari Keranjang -> Input Alamat
-    $routes->post('review', 'Pesanan::review');                 // Dari Input Alamat -> Konfirmasi Review
-    $routes->post('proses', 'Pesanan::proses');                 // Dari Konfirmasi Review -> Simpan DB
+    $routes->post('prepare_review', 'Pesanan::prepare_review');
+    $routes->post('review', 'Pesanan::review');                
+    $routes->post('proses', 'Pesanan::proses');
 
-    // Buy Now Process
-    $routes->post('buy_now_start', 'Pesanan::buy_now_start');   // Dari Produk -> Input Alamat
+    $routes->post('buy_now_start', 'Pesanan::buy_now_start');
 
-    // Detail, Invoice, Update, Hapus
     $routes->get('detail/(:num)', 'Pesanan::detail/$1');
     $routes->get('invoice/(:num)', 'Pesanan::invoice/$1');
     $routes->get('ubah/(:num)', 'Pesanan::ubah/$1');
-    $routes->post('update/(:num)', 'Pesanan::update/$1'); // Menggunakan POST agar sesuai dengan kode Controller
+    $routes->post('update/(:num)', 'Pesanan::update/$1');
     $routes->get('hapus/(:num)', 'Pesanan::hapus/$1');
     $routes->get('lacak-pesanan/(:num)', 'Pesanan::lacakPesanan/$1');
 });
-// Alias lama
 $routes->get('/pesanan/(:num)', 'Pesanan::detail/$1');
 
 
-// --- Routes Lain yang Diberikan (Tanpa Komentar) ---
 
 $routes->get('/layout/about', 'Page::about');
 $routes->get('/akun', 'Akun::index');

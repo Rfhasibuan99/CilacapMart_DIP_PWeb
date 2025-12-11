@@ -17,17 +17,12 @@ class SocialAuth extends Controller
 
     public function __construct()
     {
-        // Inisialisasi Models
         $this->userModel = model(UserModel::class);
         $this->akunModel = model(AkunModel::class);
 
         helper(['text', 'auth']);
     }
 
-    /**
-     * Menerima provider (google/apple) dan mengarahkan pengguna ke halaman otorisasi.
-     * URI: /social/login/google
-     */
     public function login($provider)
     {
         if (! in_array($provider, ['google', 'apple'])) {
@@ -43,10 +38,6 @@ class SocialAuth extends Controller
         }
     }
 
-    /**
-     * Menerima respons dari Google/Apple dan memproses login.
-     * URI: /social/login/google/callback
-     */
     public function callback($provider)
     {
         if (! in_array($provider, ['google', 'apple'])) {
@@ -54,7 +45,6 @@ class SocialAuth extends Controller
         }
 
         try {
-            // Mengambil data user dari penyedia
             $socialite = service('socialite');
             $socialUser = $socialite->driver($provider)->user();
         } catch (\Exception $e) {
@@ -62,25 +52,18 @@ class SocialAuth extends Controller
             return redirect()->to(route_to('login'))->with('error', 'Gagal memverifikasi akun ' . ucfirst($provider) . '.');
         }
 
-        // Proses login atau register
         return $this->loginOrRegister($socialUser, $provider);
     }
 
-    /**
-     * Register/Login otomatis berdasarkan data social user
-     */
     private function loginOrRegister($socialUser, $provider)
     {
         $auth = service('authentication');
 
-        // Cek apakah email sudah terdaftar
         $existingUser = $this->userModel->where('email', $socialUser->getEmail())->first();
 
         if ($existingUser) {
-            // User sudah ada, langsung login
             $auth->login($existingUser);
         } else {
-            // User baru, buat akun
             $dummyPassword = bin2hex(random_bytes(16));
             $username = $this->generateUniqueUsername($socialUser->getEmail());
 
@@ -91,12 +74,10 @@ class SocialAuth extends Controller
                 'active'        => 1,
             ]);
 
-            // Update nama pengguna
             $this->akunModel->update($userId, [
                 'nama_pengguna' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'Social User'
             ]);
 
-            // Login user baru
             $newUser = $this->userModel->find($userId);
             $auth->login($newUser);
         }
@@ -104,9 +85,6 @@ class SocialAuth extends Controller
         return redirect()->to('/dashboard')->with('success', 'Login dengan ' . ucfirst($provider) . ' berhasil!');
     }
 
-    /**
-     * Generate unique username dari email
-     */
     private function generateUniqueUsername($email)
     {
         $baseUsername = explode('@', $email)[0];

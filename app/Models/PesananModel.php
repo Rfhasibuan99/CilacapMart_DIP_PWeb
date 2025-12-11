@@ -14,11 +14,6 @@ class PesananModel extends Model
         'metode_pembayaran', 'metode_pengiriman',
         'penerima_pesanan', 'telp_pesanan', 'alamat_lengkap_pesanan'
     ];
-
-    // Pastikan field lain yang digunakan di controller juga diizinkan:
-    // 'subtotal', 'ongkir', 'diskon' sudah ditambahkan di atas.
-
-    // Ambil pesanan berdasarkan ID + detail user
     public function getPesananWithDetails($idPesanan)
     {
         return $this->select('pesanan.*')
@@ -26,7 +21,6 @@ class PesananModel extends Model
             ->first();
     }
 
-    // Ambil semua pesanan milik user
     public function getPesananByUser($idUser)
     {
         return $this->where('id_user', $idUser)

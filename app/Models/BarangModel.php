@@ -8,10 +8,8 @@ class BarangModel extends Model
 {
     protected $table = 'barang';
     protected $primaryKey = 'id_barang';
-    // FIX: Menggunakan harga_beli dan harga_jual agar konsisten dengan findBarang() dan praktik e-commerce.
     protected $allowedFields = ['nama_barang', 'jenis_barang', 'deskripsi', 'gambar', 'stok', 'harga_beli', 'harga_jual']; 
 
-    // getBarang
     public function getBarang($idbarang = false)
     {
         if ($idbarang == false) {
@@ -21,7 +19,6 @@ class BarangModel extends Model
         return $this->where(['id_barang' => $idbarang])->first();
     }
 
-    // findBarang / pencarian
     public function findBarang($cari)
     {
         return $this

@@ -11,13 +11,10 @@
     <link rel="icon" href="../../../../logo.png" type="image/png">
 
     <style>
-        /* Definisikan warna Biru Navy */
         :root {
             --navy-blue: #003366;
             --light-blue: #ADD8E6;
         }
-
-        /* --- STICKY FOOTER CSS --- */
         html,
         body {
             height: 100%;
@@ -33,28 +30,23 @@
             flex: 1;
         }
         
-        /* --- TOP BAR STYLE (Perbaikan Alignment Notifikasi & Item Lain) --- */
         .top-bar .container-fluid {
             align-items: center; 
         }
 
-        /* Style untuk grup link di sebelah kiri top-bar */
         .top-bar .left-links > span {
             margin-right: 15px;
         }
         
-        /* Style untuk grup link di sebelah kanan top-bar */
         .top-bar .right-links {
             display: flex;
             align-items: center; 
         }
 
-        /* Atur jarak antar item di kanan */
         .top-bar .right-links > span {
             margin-left: 15px;
         }
         
-        /* --- HEADER STYLE (Navbar Utama) --- */
         .main-nav {
             background-color: var(--navy-blue);
         }
@@ -66,15 +58,13 @@
             gap: 25px;
         }
 
-        /* LOGO */
         .logo-text {
             font-size: 24px;
             font-weight: bold;
             color: white;
-            white-space: nowrap; /* Mencegah teks 'Cilacap Mart' pecah baris */
+            white-space: nowrap; 
         }
 
-        /* SEARCH */
         .search-area {
             flex: 1;
             max-width: 650px;
@@ -97,7 +87,6 @@
             color: var(--navy-blue);
         }
 
-        /* ICON GROUP: Rapi dan Sejajar */
         .icon-group {
             display: flex;
             align-items: center; 
@@ -108,7 +97,7 @@
         .icon-link {
             color: white;
             font-size: 28px;
-            margin-left: 15px; /* Margin diperkecil agar lebih rapi */
+            margin-left: 15px;
             transition: 0.2s ease;
         }
 
@@ -116,7 +105,7 @@
             color: var(--light-blue);
         }
 
-        /* --- PRODUCT CARD STYLE (Interaktif) --- */
+
         .product-card {
             background-color: white;
             cursor: pointer;
@@ -143,7 +132,6 @@
             margin-bottom: 0;
         }
 
-        /* --- FOOTER STYLE --- */
         footer {
             flex-shrink: 0;
             background-color: var(--navy-blue);

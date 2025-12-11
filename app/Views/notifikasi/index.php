@@ -9,7 +9,6 @@
     <h2 class="fw-bold mb-4">Pesan Masuk (Ganti Nama Jadi Chat)</h2>
     
     <?php
-        // ASUMSI: $chats berisi array percakapan terbaru
         $chats = [
             ['user_id' => 'user_1234', 'user_name' => 'Fulan Ahadi', 'last_message' => 'Barang saya kenapa belum dikirim?'],
             ['user_id' => 'user_5678', 'user_name' => 'Budi Santoso', 'last_message' => 'Apakah produk ini masih tersedia?'],

@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const txt = messageInput.value.trim();
     if(!txt || !currentPartner) return;
 
-    // CSRF: include token if CI4 CSRF protection enabled
     const csrfName = document.querySelector('meta[name="csrf-name"]')?.getAttribute('content');
     const csrfHash = document.querySelector('meta[name="csrf-hash"]')?.getAttribute('content');
 
@@ -169,16 +168,15 @@ document.addEventListener('DOMContentLoaded', function(){
     backBtn.style.display = 'none';
   });
 
-  // ping online + refresh users
+
   setInterval(function(){
     fetch('/chat/ping', { method: 'POST' });
     loadUsers(searchUser.value || '');
   }, 15000);
 
-  // initial
+
   loadUsers();
 
-  // if page opened with partner id
   if(typeof currentPartner !== 'undefined' && currentPartner && currentPartner !== 0){
     fetch('/chat/users').then(r => r.json()).then(list => {
       const p = list.find(u => u.id == currentPartner);

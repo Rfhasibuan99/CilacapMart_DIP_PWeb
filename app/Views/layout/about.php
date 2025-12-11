@@ -2,7 +2,7 @@
 <?= $this->section('content'); ?>
 <style>
     body {
-        background-color: #E8EFF7; /* biru muda sesuai desain */
+        background-color: #E8EFF7; 
     }
 </style>
 <h2>Tentang Kami</h2>

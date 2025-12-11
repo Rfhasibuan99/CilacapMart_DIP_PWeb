@@ -2,7 +2,6 @@
 <?= $this->section('content'); ?>
 
 <style>
-    /* Gaya CSS Khusus untuk Tampilan Detail Tunggal */
     body {
         background-color: #f0f8ff; 
     }
@@ -25,7 +24,6 @@
         font-size: 2rem;
         font-weight: bold;
     }
-    /* Gaya untuk tabel detail (untuk memisahkan label dan nilai) */
     .table-detail {
         margin-top: 20px;
     }

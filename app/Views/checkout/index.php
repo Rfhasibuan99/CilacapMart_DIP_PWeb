@@ -13,10 +13,8 @@
             <h5 class="mb-3 mt-4">Detail Pesanan (<?= count($keranjang) ?> Item)</h5>
             <div class="card p-3 mb-4">
                 <?php 
-                // Pastikan $keranjang adalah array dan tidak kosong
                 if (!empty($keranjang)): ?>
                     <?php foreach($keranjang as $item): 
-                        // Hitung subtotal di sini untuk tampilan, atau gunakan yang dikirim dari JS
                         $subtotal_item = ($item['harga_jual'] ?? 0) * ($item['jumlah'] ?? 0); 
                     ?>
                     <div class="item-detail">

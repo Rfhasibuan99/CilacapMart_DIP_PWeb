@@ -12,10 +12,6 @@ class Barang extends BaseController
     {
         $this->BarangModel = new BarangModel();
     }
-
-    // ======================
-    // INDEX
-    // ======================
     public function index()
     {
         $cari = $this->request->getVar('cari');
@@ -42,11 +38,6 @@ class Barang extends BaseController
 
     return view('barang/detail', $data);
 }
-
-
-    // ======================
-    // FORM TAMBAH
-    // ======================
     public function tambah()
     {
         $data = [
@@ -56,10 +47,6 @@ class Barang extends BaseController
 
         return view('barang/tambah', $data);
     }
-
-    // ======================
-    // SIMPAN DATA BARU
-    // ======================
     public function simpan()
     {
         if (!$this->validate([
@@ -101,10 +88,6 @@ class Barang extends BaseController
         session()->setFlashdata('pesan', 'Barang berhasil ditambahkan');
         return redirect()->to('/barang');
     }
-
-    // ======================
-    // FORM ubah
-    // ======================
   public function ubah($idbarang)
 {
     $BarangModel = new BarangModel();
@@ -122,9 +105,6 @@ class Barang extends BaseController
 
     return view('barang/ubah', $data);
 }
-    // ======================
-    // UPDATE DATA
-    // ======================
     public function update($idbarang)
     {
         $dataLama = $this->BarangModel->getBarang($idbarang);
@@ -177,9 +157,6 @@ class Barang extends BaseController
         return redirect()->to('/barang');
     }
 
-    // ======================
-    // HAPUS DATA
-    // ======================
     public function hapus($idbarang)
     {
         $barang = $this->BarangModel->getBarang($idbarang);

@@ -19,10 +19,8 @@ class Chat extends BaseController
         $this->db = \Config\Database::connect();
     }
 
-    // show main chat page (list + optional opened room)
     public function index($receiver_id = 0)
     {
-        // $receiver_id optional — if provided, open room immediately
         $data = [
             'receiver_id' => (int)$receiver_id,
             'current_user' => user()->id
@@ -30,7 +28,6 @@ class Chat extends BaseController
         return view('chat/index', $data);
     }
 
-    // return JSON list of users with last message & online
     public function users()
     {
         $currId = user()->id;
@@ -46,13 +43,11 @@ class Chat extends BaseController
                 ->get()
                 ->getRowArray();
 
-            // unread simple count (messages from user to me)
             $unread = $this->db->table('chat')
                 ->where('sender_id', $u['id'])
                 ->where('receiver_id', $currId)
                 ->countAllResults();
 
-            // online check
             $statusRow = $this->statusModel->find($u['id']);
             $online = false;
             if ($statusRow) {
@@ -74,7 +69,6 @@ class Chat extends BaseController
         return $this->response->setJSON($result);
     }
 
-    // room view (not used much because main index has UI), kept for direct link
     public function room($receiver_id)
     {
         $data = [
@@ -85,7 +79,6 @@ class Chat extends BaseController
         return view('chat/index', $data);
     }
 
-    // send message via AJAX
     public function send()
     {
         $sender = user()->id;
@@ -105,25 +98,21 @@ class Chat extends BaseController
         return $this->response->setJSON(['status' => 'ok']);
     }
 
-    // SSE stream for a personal 1:1 room
     public function stream($partner_id)
     {
         $current = user()->id;
         $partner_id = (int)$partner_id;
 
-        // SSE headers
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
         header('Connection: keep-alive');
 
-        // prevent timeout and keep running until client disconnects
         set_time_limit(0);
         ignore_user_abort(true);
 
         $lastId = 0;
 
         while (true) {
-            // get messages between current and partner; if lastId>0 fetch newer only
             $builder = $this->db->table('chat')
                 ->where(" (sender_id = {$current} AND receiver_id = {$partner_id}) OR (sender_id = {$partner_id} AND receiver_id = {$current}) ");
 
@@ -139,20 +128,17 @@ class Chat extends BaseController
                 ob_flush();
                 flush();
             } else {
-                // send comment as keep-alive (some proxies)
                 echo ": keep-alive\n\n";
                 ob_flush();
                 flush();
             }
 
-            // small sleep to reduce CPU
             sleep(1);
 
             if (connection_aborted()) break;
         }
     }
 
-    // simple ping to update online status; called every ~15s from client
     public function ping()
     {
         $uid = user()->id;

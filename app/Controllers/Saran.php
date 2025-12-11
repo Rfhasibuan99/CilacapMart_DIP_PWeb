@@ -106,7 +106,6 @@ public function daftar()
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Tandai sebagai 'Dibaca'
         if ($saran['status'] === 'Baru') {
             $this->saranModel->update($id, ['status' => 'Dibaca']);
             $saran['status'] = 'Dibaca'; 
@@ -114,9 +113,6 @@ public function daftar()
 
         return view('saran/admin_detail', ['title' => 'Detail Saran', 'saran' => $saran]);
     }
-    // app/Controllers/Saran.php
-
-// E. Detail Saran Tunggal (untuk dipanggil dari daftar)
 public function detail_satu($id = null)
 {
     if (!in_groups('admin')) { 
@@ -129,17 +125,14 @@ public function detail_satu($id = null)
         throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
     }
 
-    // Tandai sebagai 'Dibaca'
     if ($saran['status'] === 'Baru') {
         $this->saranModel->update($id, ['status' => 'Dibaca']);
         $saran['status'] = 'Dibaca'; 
     }
 
-    // PENTING: Memanggil view baru untuk detail tunggal
     return view('saran/detail_satu', ['title' => 'Detail Saran Tunggal', 'saran' => $saran]);
 }
 
-    // Helper untuk Kategori
     private function getKategoriOpsi()
     {
          return [

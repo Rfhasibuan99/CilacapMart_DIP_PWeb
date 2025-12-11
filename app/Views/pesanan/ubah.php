@@ -56,9 +56,7 @@
             <p class="mb-0">Kode Pesanan: <strong><?= $pesanan['kode_pesanan'] ?></strong></p>
         </div>
 
-        <!-- Form untuk Update Pesanan -->
         <form action="/pesanan/update/<?= $pesanan['id_pesanan']; ?>" method="post">
-            <!-- CSRF protection (Hanya perlu jika Anda menggunakan CodeIgniter Shield/Security) -->
             <?= csrf_field(); ?>
             <input type="hidden" name="_method" value="PUT"> 
             
@@ -66,7 +64,6 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="tanggal_pesan" class="form-label">Tanggal Pesanan</label>
-                        <!-- Tanggal Pesanan biasanya read-only, hanya untuk informasi -->
                         <input type="text" class="form-control" id="tanggal_pesan" value="<?= date('d/m/Y H:i', strtotime($pesanan['tanggal_pesan'])) ?>" readonly>
                     </div>
                 </div>

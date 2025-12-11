@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Models\BarangModel; // Import Model yang akan digunakan
+use App\Models\BarangModel;
 
 class Home extends BaseController
 {
