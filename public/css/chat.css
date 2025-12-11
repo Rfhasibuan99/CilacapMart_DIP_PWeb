@@ -1,0 +1,28 @@
+/* Chat layout */
+body { background:#fafafa; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+#usersList .user-item { cursor:pointer; padding:10px 12px; border-radius:8px; display:flex; gap:10px; align-items:center; }
+#usersList .user-item:hover { background: #fff; }
+
+.user-avatar { width:48px; height:48px; border-radius:50%; background:#6c757d; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:600; }
+
+.user-info { flex:1; min-width:0; }
+.user-name { font-weight:600; }
+.user-last { font-size:12px; color:#6c757d; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.badge-unread { background:#0d6efd; color:#fff; padding:3px 7px; border-radius:999px; font-size:12px; }
+
+.online-dot { width:10px; height:10px; border-radius:50%; background:#28a745; display:inline-block; margin-right:6px; }
+
+/* Chat box bubbles */
+.message { display:inline-block; padding:10px 14px; border-radius:12px; margin:6px 0; max-width:70%; line-height:1.2; }
+.message.me { background:#dcf8c6; align-self:flex-end; float:right; border-bottom-right-radius:4px; }
+.message.other { background:#fff; align-self:flex-start; float:left; border-bottom-left-radius:4px; }
+
+#chatBox { display:flex; flex-direction:column; gap:6px; padding:20px; }
+
+/* responsive adjustments */
+@media (max-width: 767px) {
+  #usersList { display:block; }
+  .col-md-8.col-lg-9 { display:block; }
+}

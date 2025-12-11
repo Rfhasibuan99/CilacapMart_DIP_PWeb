@@ -1,9 +1,9 @@
-<?= $this->extend('layout/template') ?>
-<?= $this->section('content') ?>
-
+<?= $this->extend('layout/template'); ?>
+<?= $this->section('content'); ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 <style>
     body {
-        background-color: #E8EFF7 !important; /* Biru muda sesuai desain */
+        background-color: #E8EFF7 !important; 
     }
     .keranjang-item-row {
         background-color: #fff;
@@ -48,7 +48,7 @@
         align-items: center;
     }
     .btn-pesan-sekarang {
-        background-color: #003366; /* Biru gelap */
+        background-color: #003366; 
         color: #fff;
         padding: 10px 40px;
         font-size: 18px;
@@ -62,7 +62,6 @@
 <div class="container py-4">
     <h3 class="keranjang-header">Keranjang Belanja</h3>
     
-    <!-- Header Tabel Manual -->
     <div class="row text-secondary mb-2" style="font-size: 14px;">
         <div class="col-1 text-center"></div>
         <div class="col-4">Nama</div>
@@ -71,65 +70,139 @@
         <div class="col-2 text-center">Total</div>
         <div class="col-2 text-center">Aksi</div>
     </div>
+    
+    <form id="formCheckout" action="<?php echo base_url('pesanan/prepare_review'); ?>" method="post">
+        <?= csrf_field(); ?>
+        <input type="hidden" name="selected_items_json" id="selectedItemsJson">
+        <input type="hidden" name="calculated_total_price" id="calculatedTotalPrice">
 
-    <?php if (empty($keranjang)): ?>
-        <div class="alert alert-warning text-center">Keranjang belanja Anda kosong.</div>
-    <?php else: ?>
-        <!-- Looping Item Keranjang -->
-        <?php foreach($keranjang as $item): ?>
-        <div class="keranjang-item-row">
-            <!-- Kolom Checkbox -->
-            <div class="col-1 text-center">
-                <input class="form-check-input" type="checkbox" checked>
+        <?php if (empty($keranjang)): ?>
+            <div class="alert alert-warning text-center">Keranjang belanja Anda kosong.</div>
+        <?php else: ?>
+            <?php foreach($keranjang as $item): ?>
+            <div class="keranjang-item-row" data-harga="<?php echo $item['harga_jual']; ?>" data-id="<?php echo $item['id_keranjang']; ?>">
+                
+                <div class="col-1 text-center">
+                    <input class="form-check-input item-checkbox" type="checkbox" checked data-id="<?php echo $item['id_keranjang']; ?>" 
+                            data-item='<?php echo htmlspecialchars(json_encode($item), ENT_QUOTES, 'UTF-8'); ?>'> 
+                </div>
+                
+                <div class="col-4 d-flex align-items-center">
+                    <img src="<?php echo base_url('img/' . $item['gambar']); ?>" class="img-thumb me-3" onerror="this.src='https://via.placeholder.com/100x100?text=No+Image'">
+                    <div>
+                        <div class="fw-bold"><?php echo $item['nama_barang']; ?></div>
+                        <div class="text-secondary" style="font-size: 14px;">Harga: Rp.<?php echo number_format($item['harga_jual'], 0, ',', '.'); ?></div>
+                    </div>
+                </div>
+
+                <div class="col-2 text-center">
+                    Rp.<?php echo number_format($item['harga_jual'], 0, ',', '.'); ?>
+                </div>
+                
+                <div class="col-1 text-center">
+                    <input type="number" value="<?php echo $item['jumlah']; ?>" min="1" max="99" class="form-control input-jumlah input-jumlah-item mx-auto" data-id="<?php echo $item['id_keranjang']; ?>" style="display: inline-block;">
+                </div>
+
+                <div class="col-2 text-center fw-bold">
+                    Rp.<span class="subtotal-item" data-id="<?php echo $item['id_keranjang']; ?>"><?php echo number_format($item['subtotal'], 0, ',', '.'); ?></span>
+                </div>
+
+                <div class="col-2 text-center">
+                    <a href="<?php echo base_url('/keranjang/hapus/' . $item['id_keranjang']); ?>" class="btn btn-sm btn-light btn-hapus">hapus</a>
+                </div>
             </div>
+            <?php endforeach; ?>
             
-            <!-- Kolom Gambar dan Nama -->
-            <div class="col-4 d-flex align-items-center">
-                <img src="<?= base_url('img/' . $item['gambar']) ?>" class="img-thumb me-3">
-                <div>
-                    <div class="fw-bold"><?= $item['nama_barang'] ?></div>
-                    <div class="text-secondary" style="font-size: 14px;">Harga: Rp.<?= number_format($item['harga_jual']) ?></div>
+            <div class="total-checkout-area">
+                <div class="d-flex align-items-center">
+                    <input class="form-check-input me-2" type="checkbox" id="pilihSemuaCheckbox" checked>
+                    <label class="form-check-label" for="pilihSemuaCheckbox">Pilih semua</label>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="me-4 fw-bold">Total (<span id="totalProduk">0</span> Produk): Rp.<span id="totalHarga">0</span></div>
                 </div>
             </div>
 
-            <!-- Kolom Harga Satuan -->
-            <div class="col-2 text-center">
-                Rp.<?= number_format($item['harga_jual']) ?>
-            </div>
-            
-            <!-- Kolom Jumlah -->
-            <div class="col-1 text-center">
-                <!-- Gunakan input jumlah dari form untuk update atau checkout -->
-                <input type="number" value="<?= $item['jumlah'] ?>" min="1" class="form-control input-jumlah mx-auto" style="display: inline-block;">
-            </div>
-
-            <!-- Kolom Total -->
-            <div class="col-2 text-center fw-bold">
-                Rp.<?= number_format($item['subtotal']) ?>
-            </div>
-
-            <!-- Kolom Hapus -->
-            <div class="col-2 text-center">
-                <a href="<?= base_url('/keranjang/hapus/' . $item['id_keranjang']) ?>" class="btn btn-sm btn-light btn-hapus">hapus</a>
-            </div>
-        </div>
-        <?php endforeach; ?>
-        
-        <!-- Area Total dan Checkout -->
-        <div class="total-checkout-area">
-            <div class="d-flex align-items-center">
-                <input class="form-check-input me-2" type="checkbox" checked>
-                <label class="form-check-label">Pilih semua</label>
-            </div>
-            <div class="d-flex align-items-center">
-                <div class="me-4 fw-bold">Total (<?= count($keranjang) ?> Produk): Rp.<?= number_format($total) ?></div>
-                <a href="<?= base_url('/checkout') ?>" class="btn btn-info btn-sm">Buat Pesanan</a>
-            </div>
-        </div>
-
-        <!-- Tombol Pesan Sekarang -->
-        <a href="<?= base_url('/checkout') ?>" class="btn btn-pesan-sekarang">Pesan sekarang</a>
-    <?php endif; ?>
+            <button type="submit" class="btn btn-pesan-sekarang">Pesan sekarang</button>
+        <?php endif; ?>
+    </form>
 </div>
 
-<?= $this->endSection() ?>
+<script>
+$(document).ready(function() {
+    function formatRupiah(angka) {
+        return parseFloat(angka).toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    function hitungTotal() {
+        let totalProdukTerpilih = 0;
+        let totalHargaTerpilih = 0;
+        let selectedItems = [];
+
+        if ($('.keranjang-item-row').length === 0) {
+            $('#totalProduk').text(0);
+            $('#totalHarga').text(0);
+            $('#selectedItemsJson').val(JSON.stringify([]));
+            $('#calculatedTotalPrice').val(0);
+            return;
+        }
+
+        $('.keranjang-item-row').each(function() {
+            const itemId = $(this).data('id');
+            const $checkbox = $('.item-checkbox[data-id="' + itemId + '"]');
+            const $inputJumlah = $('.input-jumlah-item[data-id="' + itemId + '"]');
+            const hargaSatuan = parseFloat($(this).data('harga'));
+            const jumlah = parseInt($inputJumlah.val() || 0); 
+            const subtotal = hargaSatuan * jumlah;
+            
+            $('.subtotal-item[data-id="' + itemId + '"]').text(formatRupiah(subtotal));
+            
+            if ($checkbox.is(':checked')) {
+                totalProdukTerpilih += jumlah;
+                totalHargaTerpilih += subtotal;
+                
+                try {
+                    let itemData = JSON.parse($checkbox.attr('data-item'));
+                    itemData.jumlah = jumlah;
+                    itemData.subtotal = subtotal;
+                    selectedItems.push(itemData);
+                } catch (e) {
+                    console.error("Gagal parse JSON item keranjang:", e);
+                }
+            }
+        });
+
+        $('#totalProduk').text(totalProdukTerpilih);
+        $('#totalHarga').text(formatRupiah(totalHargaTerpilih));
+
+        $('#selectedItemsJson').val(JSON.stringify(selectedItems));
+        $('#calculatedTotalPrice').val(totalHargaTerpilih);
+    }
+
+    $('#pilihSemuaCheckbox').on('change', function() {
+        const isChecked = $(this).is(':checked');
+        $('.item-checkbox').prop('checked', isChecked);
+        hitungTotal();
+    });
+
+    $(document).on('change', '.item-checkbox', function() {
+        hitungTotal();
+        const allChecked = $('.item-checkbox:checked').length === $('.item-checkbox').length;
+        $('#pilihSemuaCheckbox').prop('checked', allChecked);
+    });
+
+    $(document).on('change keyup', '.input-jumlah-item', function() {
+        let $input = $(this);
+        let jumlah = parseInt($input.val());
+
+        if (isNaN(jumlah) || jumlah < 1) {
+            $input.val(1);
+        }
+        hitungTotal();
+    });
+    
+    hitungTotal();
+});
+</script>
+
+<?= $this->endSection(); ?>

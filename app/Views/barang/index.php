@@ -23,6 +23,11 @@
         object-fit: cover;
         border-radius: 10px;
         border: 1px solid #ddd;
+        flex-shrink: 0;
+    }
+
+    .product-info {
+        flex-grow: 1;
     }
 
     .product-info h3 {
@@ -55,12 +60,26 @@
         padding: 12px;
         margin-top: 10px;
         border: 1px solid #e4e4e4;
+        margin-bottom: 20px;
+    }
+    
+    .qty-input-group {
+        width: 150px;
+        margin-bottom: 15px;
     }
 
-    .action-buttons button,
-    .action-buttons a {
+    .action-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 200px;
+    }
+
+    .action-group .btn {
+        width: 100%;
         padding: 10px 20px;
-        border-radius: 10px;
+        border-radius: 8px;
+        font-weight: 600;
     }
 
     .btn-beli {
@@ -82,13 +101,20 @@
     .btn-cart:hover {
         background-color: #007AA1;
     }
+    
+    .admin-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
 </style>
 
 <div class="mb-3 back-text" onclick="history.back()">
     <h4>← Kembali ke Dashboard</h4>
 </div>
 <div class="container pt-4">
-    <h2 class="mb-4 fw-bold">Daftar Produk barang</h2>
+    <h2 class="mb-4 fw-bold">Daftar Produk</h2>
 
     <?php if (in_groups('admin')): ?>
         <div class="text-end mb-3">
@@ -99,13 +125,11 @@
     <?php foreach ($barang as $b): ?>
         <div class="product-card">
 
-            <!-- GAMBAR PRODUK -->
             <div>
                 <img src="<?= base_url('img/' . $b['gambar']) ?>"
                     onerror="this.src='https://via.placeholder.com/350x350?text=No+Image'">
             </div>
 
-            <!-- DETAIL PRODUK -->
             <div class="product-info">
 
                 <h3><?= $b['nama_barang']; ?></h3>
@@ -127,41 +151,77 @@
                 <div class="desc-box">
                     <?= $b['deskripsi']; ?>
                 </div>
+                
+                <div class="action-user">
+                    
+                    <div class="input-group qty-input-group">
+                        <span class="input-group-text">Qty</span>
+                        <input type="number" id="qty_<?= $b['id_barang']; ?>" 
+                                name="jumlah_input" 
+                                value="1" min="1" max="<?= $b['stok']; ?>" 
+                                class="form-control text-center" required>
+                    </div>
 
-                <!-- BUTTON -->
-                <div class="action-buttons mt-3 d-flex gap-3">
+                    <div class="action-group">
+                        
+                        <form action="<?= base_url('/pesanan/buy_now_start') ?>" method="post" id="form_buy_<?= $b['id_barang']; ?>">
+                            <?= csrf_field(); ?>
+                            <input type="hidden" name="id_barang" value="<?= $b['id_barang']; ?>">
+                            <input type="hidden" name="nama_barang" value="<?= $b['nama_barang']; ?>">
+                            <input type="hidden" name="harga_jual" value="<?= $b['harga_jual']; ?>">
+                            <input type="hidden" name="gambar" value="<?= $b['gambar']; ?>">
+                            <input type="hidden" name="jumlah" id="jumlah_buy_<?= $b['id_barang']; ?>" value="1">
+                            
+                            <button type="submit" class="btn btn-beli">Beli Sekarang</button>
+                        </form>
 
-                    <form action="/keranjang/tambah" method="post" class="d-inline">
-                        <?= csrf_field(); ?>
-                        <input type="hidden" name="id_barang" value="<?= $b['id_barang']; ?>">
-                        <input type="hidden" name="jumlah" value="1">
-
-                        <button type="submit" class="btn btn-success btn-sm">
-                            + Keranjang
-                        </button>
-                    </form>
-
-
-                    <a href="/pesanan/<?= $b['id_barang']; ?>" class="btn btn-beli">
-                        Beli Sekarang
-                    </a>
-
-                    <?php if (in_groups('admin')): ?>
+                        <form action="<?= base_url('/keranjang/tambah') ?>" method="post" id="form_cart_<?= $b['id_barang']; ?>">
+                            <?= csrf_field(); ?>
+                            <input type="hidden" name="id_barang" value="<?= $b['id_barang']; ?>">
+                            <input type="hidden" name="jumlah" id="jumlah_cart_<?= $b['id_barang']; ?>" value="1">
+                            
+                            <button type="submit" class="btn btn-cart">Tambah ke Keranjang</button>
+                        </form>
+                        
+                    </div>
+                </div>
+                
+                <?php if (in_groups('admin')): ?>
+                    <div class="admin-actions">
                         <a href="/barang/ubah/<?= $b['id_barang']; ?>" class="btn btn-warning text-white">
                             Ubah
                         </a>
-
                         <a href="/barang/hapus/<?= $b['id_barang']; ?>" class="btn btn-danger">
                             Hapus
                         </a>
-                    <?php endif; ?>
-
-                </div>
+                    </div>
+                <?php endif; ?>
 
             </div>
+
         </div>
     <?php endforeach; ?>
 </div>
+
+<script>
+    document.querySelectorAll('.product-card').forEach(card => {
+        const idBarang = card.querySelector('input[name="id_barang"]').value;
+        const inputQty = card.querySelector(`#qty_${idBarang}`);
+        const jumlahBuy = card.querySelector(`#jumlah_buy_${idBarang}`);
+        const jumlahCart = card.querySelector(`#jumlah_cart_${idBarang}`);
+
+        function syncQty() {
+            const value = inputQty.value;
+            jumlahBuy.value = value;
+            jumlahCart.value = value;
+        }
+
+        if (inputQty) {
+            inputQty.addEventListener('input', syncQty);
+            syncQty();
+        }
+    });
+</script>
 
 
 <?= $this->endSection(); ?>

@@ -4,8 +4,69 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55de812a1c4c7fa85c94520d8ff2ec66",
+    "content-hash": "9bf6fe38c974e7da8a9a61e065df9d67",
     "packages": [
+        {
+            "name": "agungsugiarto/codeigniter4-socialite",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/agungsugiarto/codeigniter4-socialite.git",
+                "reference": "b84f433c4fdfc3cacba784c039a327631976aa12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/agungsugiarto/codeigniter4-socialite/zipball/b84f433c4fdfc3cacba784c039a327631976aa12",
+                "reference": "b84f433c4fdfc3cacba784c039a327631976aa12",
+                "shasum": ""
+            },
+            "require": {
+                "codeigniter4/framework": "^4.1",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "^2.1",
+                "phpunit/phpunit": "^8.0|^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fluent\\Socialite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Agung Sugiarto",
+                    "email": "me.agungsugiarto@gmail.com"
+                }
+            ],
+            "description": "Forked from Laravel Socialite wrapper around OAuth 1 & OAuth 2 libraries.",
+            "keywords": [
+                "codeigniter4",
+                "oauth",
+                "ouath2-client"
+            ],
+            "support": {
+                "issues": "https://github.com/agungsugiarto/codeigniter4-socialite/issues",
+                "source": "https://github.com/laravel/codeigniter4-socialite"
+            },
+            "time": "2021-08-18T14:50:22+00:00"
+        },
         {
             "name": "carbonphp/carbon-doctrine-types",
             "version": "3.2.0",

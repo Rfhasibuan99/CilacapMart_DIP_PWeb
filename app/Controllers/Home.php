@@ -1,21 +1,37 @@
-<?php
+<?php namespace App\Controllers;
 
-namespace App\Controllers;
-use App\Models\BarangModel;
-
-// use App\Models\ShopModel;
+use App\Models\BarangModel; // Import Model yang akan digunakan
 
 class Home extends BaseController
 {
+ public function index()
+ {
+         $session = service('session');
+        $auth = service('auth');
+        
 
-    public function index()
-    {
-        $model = new BarangModel();
-        $data['barang'] = $model->findAll();
-        return view('layout/home', $data);
-    }
-    // public function detail($idbarang)
-    // {
-    //     $data[]
-    // }
+        if ($session->getFlashdata('message') && $auth !== null && $auth->check()) {
+            
+
+            
+            $user = $auth->user();
+            $nama = $user ? $user->username : 'Pengguna'; 
+            
+            $session->setFlashdata('welcome_alert', "Selamat Datang di Aplikasi $nama");
+            
+            
+        }
+     $barangModel = new BarangModel();
+
+         $dataBarang = $barangModel->findAll(); 
+
+         $data = [
+        
+         'barang' => $dataBarang, 
+         'title'  => 'Daftar Barang Barang Yang Ada Di Cilacap Mart',
+        
+         ];
+
+         return view('layout/home', $data); 
+ }
 }

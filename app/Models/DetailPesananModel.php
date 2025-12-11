@@ -9,9 +9,15 @@ class DetailPesananModel extends Model
     protected $table = 'detail_pesanan';
     protected $primaryKey = 'id_detail';
     protected $allowedFields = [
-        'id_pesanan', 'id_barang', 'nama_barang', 
-        'jumlah', 'harga_satuan', 'subtotal'
+        'id_pesanan', 'id_barang',
+        'harga_barang', 'jumlah', 'subtotal'
     ];
-    
-    // Asumsi: Anda memiliki KeranjangModel dan BarangModel yang akan digunakan
+
+    public function getDetailByPesananId($id_pesanan)
+    {
+        return $this->select('detail_pesanan.*, barang.nama_barang')
+            ->join('barang', 'barang.id_barang = detail_pesanan.id_barang')
+            ->where('detail_pesanan.id_pesanan', $id_pesanan)
+            ->findAll();
+    }
 }

@@ -2,73 +2,77 @@
 
 namespace App\Controllers;
 
+use CodeIgniter\Controller;
 use App\Models\PesananModel;
-use App\Models\PembayaranModel;
 
-class Pembayaran extends BaseController
+class Pembayaran extends Controller
 {
     protected $pesananModel;
-    protected $pembayaranModel;
+    protected $session;
     protected $user_id;
 
     public function __construct()
     {
+        $this->session = \Config\Services::session();
         $this->pesananModel = new PesananModel();
-        $this->pembayaranModel = new PembayaranModel();
-        $this->user_id = 1; // Ganti dengan ID pengguna yang sedang login
+        $this->user_id = user_id() ?? 1; 
     }
 
-    // Menampilkan halaman menu pembayaran untuk pesanan tertentu
-    public function index($id_pesanan)
+    public function index()
     {
-        $pesanan = $this->pesananModel->find($id_pesanan);
-
-        if (!$pesanan || $pesanan['id_user'] != $this->user_id) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        if ($pesanan['status'] == 'Dibayar') {
-             return redirect()->to('/')->with('info', 'Pesanan ini sudah dibayar.');
-        }
-
+        $pesanan_menunggu = $this->pesananModel
+                             ->where('id_user', $this->user_id)
+                             ->where('status', 'Menunggu Pembayaran')
+                             ->findAll();
+        
         $data = [
-            'title' => 'Menu Pembayaran',
-            'pesanan' => $pesanan,
-            'total_tagihan' => $pesanan['total_harga'],
-            // Opsi metode pembayaran
-            'metode_pembayaran' => [
-                ['kode' => 'qris', 'nama' => 'QRIS (Semua Bank/E-Wallet)', 'ikon' => 'qr-code.png'],
-                ['kode' => 'transfer_bca', 'nama' => 'Transfer Bank BCA', 'ikon' => 'bca.png'],
-            ]
+            'title' => 'Daftar Pembayaran yang Tertunda',
+            'pesanan' => $pesanan_menunggu,
         ];
 
-        // Asumsi view ada di app/Views/pembayaran/index.php
         return view('pembayaran/index', $data);
     }
+
+    public function show($id_pesanan)
+{
+    $pesanan = $this->pesananModel->find($id_pesanan);
+
+
+
+    if ($pesanan['status'] !== 'Menunggu Pembayaran') {
+         return redirect()->to(base_url('pesanan/detail/' . $pesanan['id_pesanan']))->with('info', 'Pembayaran sudah diproses atau pesanan dibatalkan.');
+    }
     
-    // Proses pemilihan metode dan simulasi pembayaran
-    public function prosesBayar($id_pesanan)
+
+    $totalFinal = $pesanan['total_harga'] ?? 0;
+    
+    $data = [
+        'title' => 'Instruksi Pembayaran',
+        'pesanan' => $pesanan,
+        'totalFinal' => $totalFinal,
+    ];
+
+    return view('pembayaran/show', $data);
+}
+    
+    public function update_status()
     {
-        $metode = $this->request->getPost('metode_pembayaran');
+        $id_pesanan = $this->request->getPost('id_pesanan');
         $pesanan = $this->pesananModel->find($id_pesanan);
 
         if (!$pesanan || $pesanan['id_user'] != $this->user_id) {
-             return redirect()->back()->with('error', 'Pesanan tidak ditemukan.');
+            return redirect()->to(base_url('pesanan'))->with('error', 'Pesanan tidak valid.');
         }
 
-        // 1. Simpan data pembayaran ke tabel 'pembayaran'
-        $dataPembayaran = [
-            'id_pesanan' => $id_pesanan,
-            'metode' => $metode,
-            'jumlah' => $pesanan['total_harga'],
-            'status' => 'Pending'
-        ];
-        $this->pembayaranModel->insert($dataPembayaran);
+        if ($pesanan['status'] == 'Menunggu Pembayaran') {
+            $this->pesananModel->update($id_pesanan, [
+                'status' => 'Diproses',
+                'tanggal_bayar' => date('Y-m-d H:i:s')
+            ]);
 
-        // 2. Update status Pesanan (Simulasi Pembayaran Berhasil)
-        $this->pesananModel->update($id_pesanan, ['status' => 'Dibayar']);
+            return redirect()->to(base_url('pesanan/detail/' . $id_pesanan))->with('success', 'Konfirmasi pembayaran berhasil. Pesanan Anda sedang diproses!');
+        }
         
-        // 3. Redirect ke halaman status pesanan atau terima kasih
-        return redirect()->to('/pesanan/status/' . $id_pesanan)->with('success', 'Pembayaran Berhasil! Pesanan sedang diproses.');
+        return redirect()->to(base_url('pesanan/detail/' . $id_pesanan))->with('info', 'Status pesanan sudah diperbarui sebelumnya.');
     }
 }

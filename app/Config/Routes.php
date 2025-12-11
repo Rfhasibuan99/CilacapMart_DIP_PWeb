@@ -7,10 +7,34 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
+// --- Kelompok Routes Pesanan (Diatur Agar Lebih Terstruktur) ---
+$routes->group('pesanan', function ($routes) {
+    // Riwayat Pesanan
+    $routes->get('/', 'Pesanan::index');
+
+    // Checkout Process
+    $routes->post('prepare_review', 'Pesanan::prepare_review'); // Dari Keranjang -> Input Alamat
+    $routes->post('review', 'Pesanan::review');                 // Dari Input Alamat -> Konfirmasi Review
+    $routes->post('proses', 'Pesanan::proses');                 // Dari Konfirmasi Review -> Simpan DB
+
+    // Buy Now Process
+    $routes->post('buy_now_start', 'Pesanan::buy_now_start');   // Dari Produk -> Input Alamat
+
+    // Detail, Invoice, Update, Hapus
+    $routes->get('detail/(:num)', 'Pesanan::detail/$1');
+    $routes->get('invoice/(:num)', 'Pesanan::invoice/$1');
+    $routes->get('ubah/(:num)', 'Pesanan::ubah/$1');
+    $routes->post('update/(:num)', 'Pesanan::update/$1'); // Menggunakan POST agar sesuai dengan kode Controller
+    $routes->get('hapus/(:num)', 'Pesanan::hapus/$1');
+    $routes->get('lacak-pesanan/(:num)', 'Pesanan::lacakPesanan/$1');
+});
+// Alias lama
+$routes->get('/pesanan/(:num)', 'Pesanan::detail/$1');
+
+
+// --- Routes Lain yang Diberikan (Tanpa Komentar) ---
+
 $routes->get('/layout/about', 'Page::about');
-
-
-$routes->get('/', 'Page::index');
 $routes->get('/akun', 'Akun::index');
 $routes->get('/akun/ubah', 'Akun::ubah');
 $routes->post('/akun/update', 'Akun::update');
@@ -28,32 +52,20 @@ $routes->get('/keranjang/tambah_qty/(:num)', 'Keranjang::tambahQty/$1');
 $routes->get('/keranjang/tambah/(:num)', 'Keranjang::tambah/$1');
 $routes->get('/keranjang/kurang/(:num)', 'Keranjang::kurang/$1');
 
-// $routes->get('/checkout', 'Checkout::index');
-// $routes->post('/checkout/proses', 'Checkout::proses');
-// $routes->post('/beli-sekarang', 'Keranjang::beliSekarang');
-
-
-
-$routes->get('/pesanan', 'Pesanan::index');
-$routes->get('/pesanan/detail/(:num)', 'Pesanan::detail/$1');
-$routes->get('/pesanan/(:num)', 'Pesanan::detail/$1');
-
 
 $routes->get('checkout', 'Checkout::index');
 $routes->post('checkout/proses', 'Checkout::proses');
-// Untuk Alur Beli Langsung
-$routes->post('checkout/beli-langsung', 'Checkout::beliLangsung'); 
+$routes->post('checkout/beli-langsung', 'Checkout::beliLangsung');
 
-// --- Routes untuk Pembayaran ---
 $routes->get('pembayaran/(:num)', 'Pembayaran::index/$1');
 $routes->post('pembayaran/proses/(:num)', 'Pembayaran::prosesBayar/$1');
+$routes->post('pembayaran/update_status', 'Pembayaran::update_status');
 
 $routes->get('/layout/tambah', 'Home::tambah');
 $routes->post('/layout/simpan', 'Home::simpan');
 $routes->get('/layout/ubah/(:num)', 'Home::ubah/$1');
 $routes->put('/layout/update/(:num)', 'Home::update/$1');
 $routes->get('/layout/hapus/(:num)', 'Home::hapus/$1');
-
 
 
 $routes->get('/barang', 'Barang::index');
@@ -65,11 +77,38 @@ $routes->put('/barang/update/(:num)', 'Barang::update/$1');
 $routes->get('/barang/hapus/(:num)', 'Barang::hapus/$1');
 
 
-$routes->get('auth/google', 'SocialAuth::google');
-$routes->get('auth/google/callback', 'SocialAuth::googleCallback');
+$routes->get('social/login/(:alpha)', 'SocialAuth::login/$1');
+$routes->get('social/login/(:alpha)/callback', 'SocialAuth::callback/$1');
 
-$routes->get('auth/apple', 'SocialAuth::apple');
-$routes->post('auth/apple/callback', 'SocialAuth::appleCallback');
 
-// $routes->get('admin', 'admin\Home::index'); // Home admin
-// $routes->get('admin/pesanan', 'admin\Home::pesanan'); // Halaman produk di Home admin
+$routes->group('chat', function ($routes) {
+    $routes->get('(:num)', 'Chat::index/$1');
+    $routes->get('/', 'Chat::menu');
+    $routes->post('loadChat', 'Chat::loadChat');
+    $routes->post('KirimPesan', 'Chat::kirimPesan');
+    $routes->post('GetAllOrang', 'Chat::getAllOrang');
+});
+
+$routes->get('/saran', 'Saran::index');
+$routes->post('/saran/simpan', 'Saran::simpan');
+$routes->get('saran/daftar', 'Saran::daftar');
+$routes->get('saran/detail_satu/(:num)', 'Saran::detail_satu/$1');
+
+$routes->group('admin', ['filter' => 'login'], function ($routes) {
+    $routes->get('chat', 'Chat::index');
+    $routes->get('chat/(:num)', 'Chat::index/$1');
+    $routes->get('chat/users', 'Chat::users');
+    $routes->post('chat/send', 'Chat::send');
+    $routes->get('chat/stream/(:num)', 'Chat::stream/$1');
+    $routes->post('chat/ping', 'Chat::ping');
+});
+
+$routes->get('pesanan/input_alamat', 'Pesanan::inputAlamat');
+$routes->get('pesanan/lacak-pesanan/(:num)', 'Pesanan::lacakPesanan/$1');
+$routes->get('pesanan/invoice/(:num)', 'Pesanan::invoice/$1');
+$routes->get('pesanan/detail/(:num)', 'Pesanan::detail/$1');
+$routes->get('pesanan/detail/(:segment)', 'Pesanan::detail/$1');
+$routes->get('pesanan/ubah/(:num)', 'Pesanan::ubah/$1');
+$routes->post('pesanan/update/(:num)', 'Pesanan::update/$1');
+$routes->get('pesanan/hapus/(:num)', 'Pesanan::hapus/$1');
+$routes->get('pesanan/lacak-pesanan/(:num)', 'Pesanan::lacakPesanan/$1');

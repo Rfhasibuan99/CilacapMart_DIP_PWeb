@@ -9,9 +9,14 @@ class PesananModel extends Model
     protected $table = 'pesanan';
     protected $primaryKey = 'id_pesanan';
     protected $allowedFields = [
-        'id_user', 'kode_pesanan', 'alamat_pengiriman',
-        'tanggal_pesan', 'total_harga', 'status'
+        'id_user', 'kode_pesanan',
+        'tanggal_pesan', 'subtotal', 'ongkir', 'diskon', 'total_harga', 'status',
+        'metode_pembayaran', 'metode_pengiriman',
+        'penerima_pesanan', 'telp_pesanan', 'alamat_lengkap_pesanan'
     ];
+
+    // Pastikan field lain yang digunakan di controller juga diizinkan:
+    // 'subtotal', 'ongkir', 'diskon' sudah ditambahkan di atas.
 
     // Ambil pesanan berdasarkan ID + detail user
     public function getPesananWithDetails($idPesanan)

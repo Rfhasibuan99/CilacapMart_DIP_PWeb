@@ -15,6 +15,7 @@ use CodeIgniter\Filters\SecureHeaders;
 use Myth\Auth\Filters\LoginFilter;
 use Myth\Auth\Filters\RoleFilter;
 use Myth\Auth\Filters\PermissionFilter;
+// use CodeIgniter\Filters\Session;
 
 class Filters extends BaseFilters
 {
@@ -34,12 +35,14 @@ class Filters extends BaseFilters
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'cors'          => Cors::class,
-        'forcehttps'    => ForceHTTPS::class,
+        'forcehttps'    => ForceHTTPS::class,   
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'login'         => LoginFilter::class,
         'role'          => RoleFilter::class,
         'permission'    => PermissionFilter::class,
+        'group'         => PermissionFilter::class,
+        // 'session'       => Session::class,
 
     ];
 
@@ -80,10 +83,14 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             'honeypot',
-            // 'csrf',
+            'login',
+            'csrf',
             // 'invalidchars',
+            // 'session',
         ],
         'after' => [
+            'toolbar',
+        
             // 'honeypot',
             // 'secureheaders',
         ],
@@ -114,6 +121,6 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
-        'login' => ['before' => ['akun', 'barang', 'keranjang', 'pesanan', 'checkout', 'notifikasi','detail', 'keranjang/tambah']],
+        // 'login' => ['before' => ['akun', 'barang', 'keranjang', 'pesanan', 'checkout', 'notifikasi','detail', 'keranjang/tambah']],
     ];
 }

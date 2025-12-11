@@ -27,19 +27,17 @@
     }
 
     .qr-code-box {
-        
         width: 100%;
-        max-width: 300px; 
+        max-width: 300px;
         height: auto;
         margin: 20px auto;
         border: 2px solid #ccc;
         padding: 10px;
         border-radius: 8px;
-
     }
 
     .qr-code-box img {
-        width: 100%; 
+        width: 100%;
         height: auto;
     }
 
@@ -91,17 +89,18 @@
         <p class="text-secondary">Scan QR Code di bawah ini menggunakan aplikasi pembayaran favorit Anda.</p>
 
         <?php 
+            
             $kodePesanan = $pesanan['kode_pesanan'] ?? '20250101';
             $totalFinal = $pesanan['total_harga'] ?? 0; 
             
-           
+  
             $qrData = "PembayaranQRIS-INV-" . $kodePesanan . "-Total-" . $totalFinal;
         ?>
 
         <div class="qr-code-box">
             <img 
                 src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=<?= urlencode($qrData) ?>" 
-                alt="QR Code Pembayaran Transaksi <?= $kodePesanan ?>">
+                alt="QR Code Pembayaran">
         </div>
 
         <div class="total-payment mx-auto" style="max-width: 300px;">

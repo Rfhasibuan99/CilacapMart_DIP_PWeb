@@ -2,104 +2,187 @@
 <?= $this->section('content'); ?>
 
 <style>
-/* ====== GLOBAL ======= */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #E8EFF7;
-}
 
-/* ====== NAVBAR ======= */
-.main-nav {
-    background-color: #003366 !important;
-}
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #E8EFF7;
+    }
 
-.input-group .btn {
-    background-color: #003366;
-    color: white;
-}
 
-/* ====== WRAPPER ======= */
-.main-wrapper {
-    display: flex;
-    padding: 30px;
-    gap: 30px;
-}
+    .main-nav {
+        background-color: #003366 !important;
+    }
 
-/* ====== SIDEBAR ======= */
-.sidebar {
-    width: 250px;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
+    .input-group .btn {
+        background-color: #003366;
+        color: white;
+    }
 
-.profile i {
-    font-size: 45px;
-    color: #0096C7;
-}
+    .main-wrapper {
+        display: flex;
+        padding: 30px;
+        gap: 30px;
+    }
 
-.menu-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 5px;
-    border-radius: 10px;
-}
 
-.menu-item i {
-    margin-right: 12px;
-    font-size: 23px;
-    color: #0096C7;
-}
+    .sidebar {
+        width: 250px;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
 
-/* ====== CONTENT ======= */
-.content {
-    flex: 1;
-    background: #E0F2FE;
-    border-radius: 20px;
-    padding: 20px;
-    min-height: 520px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-/* Menu Item */
-.menu-item {
-    display: flex;
-    align-items: center;
-    font-size: 17px;
-    padding: 12px 5px;
-    border-radius: 12px;
-    transition: 0.2s;
-}
+    .profile i {
+        font-size: 45px;
+        color: #0096C7;
+    }
 
-.menu-item a {
-    color: #003049;
-    text-decoration: none;
-}
+    .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 5px;
+        border-radius: 10px;
+    }
 
-.menu-item i {
-    margin-right: 12px;
-    font-size: 23px;
-    color: #0096C7;
-}
+    .menu-item i {
+        margin-right: 12px;
+        font-size: 23px;
+        color: #0096C7;
+    }
 
-/* Hover efek */
-.menu-item:hover {
-    background: #E0F2FE;
-    transform: translateX(6px);
-}
+    .content {
+        flex: 1;
+
+        padding: 0;
+
+        background: transparent;
+        border-radius: 20px;
+        min-height: 520px;
+        overflow: hidden;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        font-size: 17px;
+        padding: 12px 5px;
+        border-radius: 12px;
+        transition: 0.2s;
+    }
+
+    .menu-item a {
+        color: #003049;
+        text-decoration: none;
+    }
+
+    .menu-item i {
+        margin-right: 12px;
+        font-size: 23px;
+        color: #0096C7;
+    }
+
+    .menu-item:hover {
+        background: #E0F2FE;
+        transform: translateX(6px);
+    }
+
+    .profile-header {
+        background-color: #0d47a1;
+        color: white;
+        padding: 20px;
+        padding-top: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        padding-bottom: 60px;
+    }
+
+    .profile-header .top-bar {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+
+    .profile-header img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #BBDEFB;
+        margin-bottom: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-details-card {
+        background-color: white;
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;
+        padding: 20px;
+        margin-top: -40px;
+        position: relative;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .detail-field {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 10px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background-color: #f7f7f7;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: background-color 0.2s;
+    }
+
+    .detail-field:hover {
+        background-color: #eeeeee;
+    }
+
+    .detail-field .label {
+        font-weight: 500;
+        color: #757575;
+        flex-basis: 35%;
+    }
+
+    .detail-field .value {
+        font-weight: 600;
+        color: #212121;
+        text-align: right;
+        flex-basis: 65%;
+    }
+
+    .btn-edit {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        text-decoration: none;
+        background-color: #0096C7;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background-color 0.2s;
+    }
+
+    .btn-edit:hover {
+        background-color: #007aa1;
+    }
 </style>
 
-
 <div class="main-wrapper">
-
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="profile">
-                <img src="https://i.pravatar.cc/80" class="avatar" alt="">
+            <i class="bi bi-person-circle"></i>
             <div>
-                <b><?= $user->username ?? 'Username'; ?></b><br>
-                <a style="font-size: 13px; cursor:pointer;" href="/akun/ubah">Ubah Profil</a>
+                <b><?= esc($user['nama_pengguna'] ?? 'Nama Pengguna') ?></b><br>
+                <a style="font-size: 13px; cursor:pointer;" href="/akun/ubah">Ubah Foto Profil</a>
             </div>
         </div>
 
@@ -116,55 +199,54 @@ body {
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="content">
-        <h3><b>Akun Saya</b></h3>
-        <br>
-
         <?php if ($user): ?>
-        <div style="max-width:800px;">
-            <div style="display:flex; gap:20px; align-items:flex-start;">
-                
-                <!-- Icon -->
-                <div style="flex:0 0 120px; text-align:center;">
-                    <img src="https://i.pravatar.cc/80" class="avatar" alt="">
+            <div class="profile-header">
+                <div class="top-bar">
+                    <a href="/" style="color:white;"><i class="bi bi-arrow-left"></i></a>
+                    <span>Profil</span>
+                    <span></span>
                 </div>
 
-                <!-- Data User -->
-                <div style="flex:1;">
-                    <table style="width:100%; font-size:16px; border-collapse:collapse;">
-                        <tr>
-                            <th style="width:160px;">Nama Pengguna</th>
-                            <td>: <?= esc($user->username) ?></td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>: <?= esc($user->email) ?></td>
-                        </tr>
-                        <tr>
-                            <th>Role</th>
-                            <td>: <?= esc($user->role) ?></td>
-                        </tr>
-                        <tr>
-                            <th>Terdaftar</th>
-                            <td>: <?= $user->created_at ? date('d/m/Y', strtotime($user->created_at)) : '-' ?></td>
-                        </tr>
-                    </table>
+                <img src="<?= base_url('img/' . ($user['gambar'] ?? 'default-profile.jpg')) ?>"
+                    alt="Foto Profil"
+                    onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100/BBDEFB/0d47a1?text=U'">
 
-                    <div style="margin-top:18px;">
-                        <a href="/akun/ubah" style="font-size:13px;">Ubah Profil</a>
-                        <a href="/forgot" class="btn-detail" style="background:#6c757d;">Ubah Password</a>
-                    </div>
-                </div>
-
+                <h4><?= esc($user['nama_pengguna'] ?? 'Aurelia af') ?></h4>
             </div>
-        </div>
 
+            <div class="profile-details-card">
+                <div class="detail-field">
+                    <span class="label">Nama</span>
+                    <span class="value"><?= esc($user['nama_pengguna'] ?? '-') ?></span>
+                </div>
+
+                <div class="detail-field">
+                    <span class="label">Email</span>
+                    <span class="value"><?= esc($user['email'] ?? '-') ?></span>
+                </div>
+
+                <div class="detail-field">
+                    <span class="label">No. Telp</span>
+                    <span class="value"><?= esc($user['no_tlp'] ?? '-') ?></span>
+                </div>
+
+                <div class="detail-field">
+                    <span class="label">Tanggal Lahir</span>
+                    <span class="value"><?= esc($user['tgl_lahir'] ? date('d/m/Y', strtotime($user['tgl_lahir'])) : '-') ?></span>
+                </div>
+
+                <div class="detail-field">
+                    <span class="label">Alamat</span>
+                    <span class="value"><?= esc($user['alamat'] ?? '-') ?></span>
+                </div>
+
+                <a href="/akun/ubah" class="btn-edit">Ubah Profil</a>
+            </div>
         <?php else: ?>
-            <p>Tidak ada data user ditemukan.</p>
+            <p style="padding:20px;">Tidak ada data user ditemukan.</p>
         <?php endif; ?>
     </div>
-
 </div>
 
 <?= $this->endSection(); ?>

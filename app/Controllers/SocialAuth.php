@@ -2,122 +2,123 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
+use CodeIgniter\Controller;
+use App\Models\AkunModel;
 use Myth\Auth\Models\UserModel;
-use Config\Services;
-use League\OAuth2\Client\Provider\Google;
-use SocialiteProviders\Apple\Provider as AppleProvider;
+use CodeIgniter\I18n\Time;
+use CodeIgniter\API\ResponseTrait;
 
-class SocialAuth extends BaseController
+class SocialAuth extends Controller
 {
-    // ---------------------------------------------
-    // GOOGLE LOGIN
-    // ---------------------------------------------
-    public function google()
+    use ResponseTrait;
+
+    protected $userModel;
+    protected $akunModel;
+
+    public function __construct()
     {
-        $provider = new Google([
-            'clientId'     => getenv('GOOGLE_CLIENT_ID'),
-            'clientSecret' => getenv('GOOGLE_CLIENT_SECRET'),
-            'redirectUri'  => getenv('GOOGLE_REDIRECT_URI')
-        ]);
+        // Inisialisasi Models
+        $this->userModel = model(UserModel::class);
+        $this->akunModel = model(AkunModel::class);
 
-        $authUrl = $provider->getAuthorizationUrl();
-        session()->set('oauth2state', $provider->getState());
-
-        return redirect()->to($authUrl);
+        helper(['text', 'auth']);
     }
 
-    public function googleCallback()
+    /**
+     * Menerima provider (google/apple) dan mengarahkan pengguna ke halaman otorisasi.
+     * URI: /social/login/google
+     */
+    public function login($provider)
     {
-        $provider = new Google([
-            'clientId'     => getenv('GOOGLE_CLIENT_ID'),
-            'clientSecret' => getenv('GOOGLE_CLIENT_SECRET'),
-            'redirectUri'  => getenv('GOOGLE_REDIRECT_URI')
-        ]);
-
-        if ($this->request->getVar('state') !== session()->get('oauth2state')) {
-            return "Invalid OAuth state";
+        if (! in_array($provider, ['google', 'apple'])) {
+            return redirect()->back()->with('error', 'Penyedia Social Login tidak didukung.');
         }
 
-        $token = $provider->getAccessToken('authorization_code', [
-            'code' => $this->request->getVar('code')
-        ]);
-
-        $userGoogle = $provider->getResourceOwner($token);
-        $email = $userGoogle->getEmail();
-        $name  = $userGoogle->getName();
-
-        return $this->loginOrRegister($email, $name);
+        try {
+            $socialite = service('socialite');
+            return $socialite->driver($provider)->redirect();
+        } catch (\Exception $e) {
+            log_message('error', 'Socialite Redirect Error: ' . $e->getMessage());
+            return redirect()->to(route_to('login'))->with('error', 'Terjadi kesalahan pada koneksi social login.');
+        }
     }
 
-    // ---------------------------------------------
-    // APPLE LOGIN
-    // ---------------------------------------------
-    public function apple()
+    /**
+     * Menerima respons dari Google/Apple dan memproses login.
+     * URI: /social/login/google/callback
+     */
+    public function callback($provider)
     {
-        $provider = new AppleProvider([
-            'clientId'  => getenv('APPLE_CLIENT_ID'),
-            'teamId'    => getenv('APPLE_TEAM_ID'),
-            'keyFileId' => getenv('APPLE_KEY_ID'),
-            'keyFilePath' => getenv('APPLE_PRIVATE_KEY_PATH'),
-            'redirectUri' => getenv('APPLE_REDIRECT_URI'),
-        ]);
+        if (! in_array($provider, ['google', 'apple'])) {
+            return redirect()->to(route_to('login'));
+        }
 
-        $authUrl = $provider->getAuthorizationUrl();
-        session()->set('oauth2state', $provider->getState());
+        try {
+            // Mengambil data user dari penyedia
+            $socialite = service('socialite');
+            $socialUser = $socialite->driver($provider)->user();
+        } catch (\Exception $e) {
+            log_message('error', 'Socialite Callback Error: ' . $e->getMessage());
+            return redirect()->to(route_to('login'))->with('error', 'Gagal memverifikasi akun ' . ucfirst($provider) . '.');
+        }
 
-        return redirect()->to($authUrl);
+        // Proses login atau register
+        return $this->loginOrRegister($socialUser, $provider);
     }
 
-    public function appleCallback()
+    /**
+     * Register/Login otomatis berdasarkan data social user
+     */
+    private function loginOrRegister($socialUser, $provider)
     {
-        $provider = new AppleProvider([
-            'clientId'  => getenv('APPLE_CLIENT_ID'),
-            'teamId'    => getenv('APPLE_TEAM_ID'),
-            'keyFileId' => getenv('APPLE_KEY_ID'),
-            'keyFilePath' => getenv('APPLE_PRIVATE_KEY_PATH'),
-            'redirectUri' => getenv('APPLE_REDIRECT_URI'),
-        ]);
+        $auth = service('authentication');
 
-        $token = $provider->getAccessToken('authorization_code', [
-            'code' => $this->request->getVar('code'),
-        ]);
+        // Cek apakah email sudah terdaftar
+        $existingUser = $this->userModel->where('email', $socialUser->getEmail())->first();
 
-        $appleUser = $provider->getResourceOwner($token);
-
-        $email = $appleUser->getEmail();
-        $name  = $appleUser->getName() ?? "Apple User";
-
-        return $this->loginOrRegister($email, $name);
-    }
-
-    // ---------------------------------------------
-    // REGISTER / LOGIN AUTOMATIS
-    // ---------------------------------------------
-    private function loginOrRegister($email, $name)
-    {
-        $users = new UserModel();
-        $auth = Services::authentication();
-
-        // cek user sudah ada?
-        $user = $users->where('email', $email)->first();
-
-        if (!$user) {
-            // buat akun baru
-            $userId = $users->insert([
-                'email' => $email,
-                'username' => $email,
-                'fullname' => $name,
-                'password_hash' => '' // karena login social tidak pakai password
-            ]);
+        if ($existingUser) {
+            // User sudah ada, langsung login
+            $auth->login($existingUser);
         } else {
-            $userId = $user['id'];
+            // User baru, buat akun
+            $dummyPassword = bin2hex(random_bytes(16));
+            $username = $this->generateUniqueUsername($socialUser->getEmail());
+
+            $userId = $this->userModel->insert([
+                'email'         => $socialUser->getEmail(),
+                'username'      => $username,
+                'password_hash' => password_hash($dummyPassword, PASSWORD_DEFAULT),
+                'active'        => 1,
+            ]);
+
+            // Update nama pengguna
+            $this->akunModel->update($userId, [
+                'nama_pengguna' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'Social User'
+            ]);
+
+            // Login user baru
+            $newUser = $this->userModel->find($userId);
+            $auth->login($newUser);
         }
 
-        // login user
-        $auth->login($userId);
+        return redirect()->to('/dashboard')->with('success', 'Login dengan ' . ucfirst($provider) . ' berhasil!');
+    }
 
-        return redirect()->to('/dashboard');
+    /**
+     * Generate unique username dari email
+     */
+    private function generateUniqueUsername($email)
+    {
+        $baseUsername = explode('@', $email)[0];
+        $username = $baseUsername;
+        $counter = 1;
+
+        while ($this->userModel->where('username', $username)->first()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
+        return $username;
     }
 }
 ?>
