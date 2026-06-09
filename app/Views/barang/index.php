@@ -62,7 +62,7 @@
         border: 1px solid #e4e4e4;
         margin-bottom: 20px;
     }
-    
+
     .qty-input-group {
         width: 150px;
         margin-bottom: 15px;
@@ -101,18 +101,19 @@
     .btn-cart:hover {
         background-color: #007AA1;
     }
-    
+
     .admin-actions {
         display: flex;
         gap: 10px;
         margin-top: 20px;
     }
-
 </style>
 
-<div class="mb-3 back-text" onclick="history.back()">
-    <h4>← Kembali ke Dashboard</h4>
-</div>
+<form action="<?= base_url('/') ?>">
+    <button class="btn btn-back">
+        Kembali Ke Dasboard
+    </button>
+</form>
 <div class="container pt-4">
     <h2 class="mb-4 fw-bold">Daftar Produk</h2>
 
@@ -122,6 +123,7 @@
         </div>
     <?php endif; ?>
 
+    <?php $barang = isset($barang) ? $barang : []; ?>
     <?php foreach ($barang as $b): ?>
         <div class="product-card">
 
@@ -151,19 +153,19 @@
                 <div class="desc-box">
                     <?= $b['deskripsi']; ?>
                 </div>
-                
+
                 <div class="action-user">
-                    
+
                     <div class="input-group qty-input-group">
                         <span class="input-group-text">Qty</span>
-                        <input type="number" id="qty_<?= $b['id_barang']; ?>" 
-                                name="jumlah_input" 
-                                value="1" min="1" max="<?= $b['stok']; ?>" 
-                                class="form-control text-center" required>
+                        <input type="number" id="qty_<?= $b['id_barang']; ?>"
+                            name="jumlah_input"
+                            value="1" min="1" max="<?= $b['stok']; ?>"
+                            class="form-control text-center" required>
                     </div>
 
                     <div class="action-group">
-                        
+
                         <form action="<?= base_url('/pesanan/buy_now_start') ?>" method="post" id="form_buy_<?= $b['id_barang']; ?>">
                             <?= csrf_field(); ?>
                             <input type="hidden" name="id_barang" value="<?= $b['id_barang']; ?>">
@@ -171,7 +173,7 @@
                             <input type="hidden" name="harga_jual" value="<?= $b['harga_jual']; ?>">
                             <input type="hidden" name="gambar" value="<?= $b['gambar']; ?>">
                             <input type="hidden" name="jumlah" id="jumlah_buy_<?= $b['id_barang']; ?>" value="1">
-                            
+
                             <button type="submit" class="btn btn-beli">Beli Sekarang</button>
                         </form>
 
@@ -179,13 +181,13 @@
                             <?= csrf_field(); ?>
                             <input type="hidden" name="id_barang" value="<?= $b['id_barang']; ?>">
                             <input type="hidden" name="jumlah" id="jumlah_cart_<?= $b['id_barang']; ?>" value="1">
-                            
+
                             <button type="submit" class="btn btn-cart">Tambah ke Keranjang</button>
                         </form>
-                        
+
                     </div>
                 </div>
-                
+
                 <?php if (in_groups('admin')): ?>
                     <div class="admin-actions">
                         <a href="/barang/ubah/<?= $b['id_barang']; ?>" class="btn btn-warning text-white">

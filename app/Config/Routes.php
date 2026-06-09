@@ -110,3 +110,24 @@ $routes->get('pesanan/hapus/(:num)', 'Pesanan::hapus/$1');
 $routes->get('pesanan/lacak-pesanan/(:num)', 'Pesanan::lacakPesanan/$1');
 $routes->get('pesanan/bayar/(:num)', 'Pesanan::bayar/$1');
 $routes->post('pesanan/update_status', 'Pesanan::update_status_pembayaran');
+
+
+$routes->group('api', function ($routes) {
+    
+    // 1. Amankan OPTIONS preflight untuk semua request API dari Flutter Web
+    $routes->options('(:any)', function() {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+        exit(0);
+    });
+
+  $routes->post('login', '\App\Controllers\Api\AuthController::login');
+
+    // 3. Route Resource untuk Beranda
+    $routes->resource('home', ['controller' => 'Api\Home']);
+    
+    // 4. Route untuk Barang API murni
+    $routes->get('barang', 'Api\BarangApi::getBarang');
+    $routes->get('barang/(:num)', 'Api\BarangApi::getBarang/$1');
+});

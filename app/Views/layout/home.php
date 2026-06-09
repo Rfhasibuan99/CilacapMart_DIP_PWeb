@@ -194,28 +194,34 @@
  <?php endif; ?>
 
  <div class="row g-4">
-  <?php foreach ($barang as $b): ?>
-   <div class="col-6 col-md-4 col-lg-3">
-    <div class="card shadow-sm h-100 border-0" style="border-radius: 15px;">
-     <img src="<?= base_url('img/' . $b['gambar']) ?>"
-      onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'"
-      class="card-img-top"
-      style="height: 220px; object-fit: cover; border-radius: 15px 15px 0 0;">
+  <?php if (!empty($barang)): ?>
+   <?php foreach ($barang as $b): ?>
+    <div class="col-6 col-md-4 col-lg-3">
+     <div class="card shadow-sm h-100 border-0" style="border-radius: 15px;">
+      <img src="<?= base_url('img/' . $b['gambar']) ?>"
+       onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'"
+       class="card-img-top"
+       style="height: 220px; object-fit: cover; border-radius: 15px 15px 0 0;">
 
-     <button class="card-body text-center border-0 shadow-sm p-4 w-100 product-card"
-      onclick="window.location.href='/barang/detail/<?= $b['id_barang']; ?>'">
+      <button class="card-body text-center border-0 shadow-sm p-4 w-100 product-card"
+       onclick="window.location.href='/barang/detail/<?= $b['id_barang']; ?>'">
 
-      <h5 class="fw-bold text-dark text-truncate"><?= $b['nama_barang']; ?></h5>
+       <h5 class="fw-bold text-dark text-truncate"><?= $b['nama_barang']; ?></h5>
 
-      <div class="d-flex justify-content-center align-items-center gap-1">
-       <p class="h6 text-primary mt-2">
-        Rp.<?= number_format($b['harga_jual'], 0, ',', '.'); ?>
-       </p>
-      </div>
-     </button>
+       <div class="d-flex justify-content-center align-items-center gap-1">
+        <p class="h6 text-primary mt-2">
+         Rp.<?= number_format($b['harga_jual'], 0, ',', '.'); ?>
+        </p>
+       </div>
+      </button>
+     </div>
     </div>
+   <?php endforeach; ?>
+  <?php else: ?>
+   <div class="col-12">
+    <p class="text-muted">Belum ada barang yang tersedia.</p>
    </div>
-  <?php endforeach; ?>
+  <?php endif; ?>
  </div>
 
  <div class="text-end mt-3">

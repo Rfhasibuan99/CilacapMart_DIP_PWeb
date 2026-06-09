@@ -15,6 +15,7 @@ use CodeIgniter\Filters\SecureHeaders;
 use Myth\Auth\Filters\LoginFilter;
 use Myth\Auth\Filters\RoleFilter;
 use Myth\Auth\Filters\PermissionFilter;
+
 // use CodeIgniter\Filters\Session;
 
 class Filters extends BaseFilters
@@ -85,6 +86,7 @@ class Filters extends BaseFilters
             'honeypot',
             'login',
             'csrf',
+            'cors',
             // 'invalidchars',
             // 'session',
         ],
@@ -121,6 +123,13 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
+        'login' => [
+        'except' => [
+            '/', 
+            'barang', 
+            'api/*', //WAJIB TAMBAHKAN INI agar semua API tidak ditendang ke halaman login web
+        ]
+    ],
         // 'login' => ['before' => ['akun', 'barang', 'keranjang', 'pesanan', 'checkout', 'notifikasi','detail', 'keranjang/tambah']],
     ];
 }

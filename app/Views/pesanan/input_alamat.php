@@ -29,7 +29,11 @@
         box-shadow: 0 0 0 0.25rem rgba(0, 51, 102, 0.25);
     }
 </style>
-
+<form action="<?= base_url('/barang') ?>">
+<button class="btn btn-back">
+    Kembali
+</button>
+</form>
 <div class="container py-5">
     <h3 class="fw-bold mb-4 text-center">Langkah 1: Input Alamat Pengiriman</h3>
 

@@ -176,6 +176,8 @@
     }
 </style>
 
+<?php $user = $user ?? null; ?>
+
 <div class="main-wrapper">
     <div class="sidebar">
         <div class="profile">
