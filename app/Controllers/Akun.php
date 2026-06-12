@@ -9,6 +9,9 @@ class Akun extends BaseController
     public function index()
     {
         $user = user(); // ← ambil user Myth/Auth
+        if (!$user) {
+            return redirect()->to('/login'); 
+        }
         $AkunModel = new AkunModel();
         $userData = $AkunModel->getAkunById($user->id); // Get full user data including gambar
 

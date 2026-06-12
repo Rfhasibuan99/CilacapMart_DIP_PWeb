@@ -233,7 +233,7 @@
             </div>
             <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
             <div class="text-center">
-                <small class="text-white-50">&copy; 2024 Cilacap Mart. Semua Hak Dilindungi.</small>
+                <small class="text-white-50">&copy; 2026 Cilacap Mart. Semua Hak Dilindungi.</small>
             </div>
         </div>
     </footer>

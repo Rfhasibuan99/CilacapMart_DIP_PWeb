@@ -85,7 +85,17 @@ class Filters extends BaseFilters
         'before' => [
             'cors',
             'honeypot',
-            // 'login',
+            'login' => [
+                'except' => [
+                    '/',
+                    'login',
+                    'logout',
+                    'register',
+                    'api/*',
+                    'barang',
+                    'barang/detail/*'
+                ]
+            ],
             'csrf' => [
                 'except' => [
                     'api/*'
@@ -128,10 +138,12 @@ class Filters extends BaseFilters
      */
     public array $filters = [
         'login' => [
-        'except' => [
-            '/', 
-            'barang', 
-            'api/*', //WAJIB TAMBAHKAN INI agar semua API tidak ditendang ke halaman login web
+        'before' => [
+            'akun', 'akun/*',
+                // 'pesanan', 'pesanan/*',
+                'keranjang', 'keranjang/*',
+                'checkout', 'checkout/*',
+                'notifikasi', 'notifikasi/*' //WAJIB TAMBAHKAN INI agar semua API tidak ditendang ke halaman login web
         ]
     ],
         // 'login' => ['before' => ['akun', 'barang', 'keranjang', 'pesanan', 'checkout', 'notifikasi','detail', 'keranjang/tambah']],
