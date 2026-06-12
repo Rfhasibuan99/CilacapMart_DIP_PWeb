@@ -19,6 +19,7 @@ class Pesanan extends Controller
 
     public function __construct()
     {
+        helper('auth');
         $this->pesananModel = new PesananModel();
         $this->detailPesananModel = new DetailPesananModel();
         $this->keranjangModel = new KeranjangModel();
