@@ -110,7 +110,7 @@ $routes->get('pesanan/hapus/(:num)', 'Pesanan::hapus/$1');
 $routes->get('pesanan/lacak-pesanan/(:num)', 'Pesanan::lacakPesanan/$1');
 $routes->get('pesanan/bayar/(:num)', 'Pesanan::bayar/$1');
 $routes->post('pesanan/update_status', 'Pesanan::update_status_pembayaran');
-
+$routes->post('barang/tambah', 'Api\BarangApi::tambahBarang');
 
 $routes->group('api', function ($routes) {
     
@@ -130,4 +130,8 @@ $routes->group('api', function ($routes) {
     // 4. Route untuk Barang API murni
     $routes->get('barang', 'Api\BarangApi::getBarang');
     $routes->get('barang/(:num)', 'Api\BarangApi::getBarang/$1');
+    $routes->post('barang/tambah', 'Api\BarangApi::tambahBarang');
+
+    $routes->put('barang/update/(:num)', 'Api\BarangApi::updateBarang/$1');
+    $routes->delete('barang/hapus/(:num)', 'Api\BarangApi::hapusBarang/$1');
 });

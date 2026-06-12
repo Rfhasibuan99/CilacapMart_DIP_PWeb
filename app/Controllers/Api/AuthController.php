@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 use Myth\Auth\Models\UserModel;
 use CodeIgniter\API\ResponseTrait;
 
-class Auth extends BaseController
+class AuthController extends BaseController
 {
     use ResponseTrait;
 
@@ -36,9 +36,13 @@ class Auth extends BaseController
 
         if (empty($login) || empty($password)) {
             return $this->respond([
-                'status'  => 0,
-                'message' => 'Email/Username dan Password tidak boleh kosong.'
-            ], 400);
+                 'login' => $login,
+                    'password' => $password
+            ]);
+            // return $this->respond([
+            //     'status'  => 0,
+            //     'message' => 'Email/Username dan Password tidak boleh kosong.'
+            // ], 400);
         }
 
         $users = model(UserModel::class);
@@ -56,18 +60,29 @@ class Auth extends BaseController
 
             $passwordHashed = base64_encode(hash('sha384', $password, true));
 
-            if (password_verify($passwordHashed, $user->password_hash)) {
-                return $this->respond([
-                    'status'  => 1,
-                    'message' => 'Login Berhasil ke CilacapMart!',
-                    'data'    => [
-                        'id'       => (int) $user->id,
-                        'username' => (string) $user->username,
-                        'email'    => (string) $user->email,
-                    ]
-                ], 200);
-            }
-        }
+       if (password_verify($passwordHashed, $user->password_hash)) {
+
+    $db = \Config\Database::connect();
+
+    $group = $db->table('auth_groups_users agu')
+        ->select('ag.name')
+        ->join('auth_groups ag', 'ag.id = agu.group_id')
+        ->where('agu.user_id', $user->id)
+        ->get()
+        ->getRow();
+
+    return $this->respond([
+        'status'  => 1,
+        'message' => 'Login Berhasil ke CilacapMart!',
+        'data'    => [
+            'id'       => (int) $user->id,
+            'username' => (string) $user->username,
+            'email'    => (string) $user->email,
+            'role'     => $group->name ?? 'user',
+        ]
+    ], 200);
+}
+    }
 
         return $this->respond([
             'status'  => 0,

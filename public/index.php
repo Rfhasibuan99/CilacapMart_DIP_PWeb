@@ -1,5 +1,26 @@
 <?php
 
+/*
+ *---------------------------------------------------------------
+ * CORS BYPASS FOR DEVELOPMENT (TAMBAHAN)
+ *---------------------------------------------------------------
+ * Mengizinkan Flutter Web mengakses API local selama development.
+ */
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Request-Method");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    exit();
+}
+
+/*
+ *---------------------------------------------------------------
+ * KODE BAWAAN CODEIGNITER 4 (JANGAN DIUBAH)
+ *---------------------------------------------------------------
+ */
+
 use CodeIgniter\Boot;
 use Config\Paths;
 
